@@ -1,0 +1,401 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Prévisualisation — {{ job.source_filename }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--navy);
+        letter-spacing: -0.03em;
+    }
+
+    .page-subtitle {
+        font-size: 0.875rem;
+        color: var(--gray-400);
+        margin-top: 0.2rem;
+        font-family: 'DM Mono', monospace;
+    }
+
+    .actions-bar {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    /* Stats row */
+    .stats-mini {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .stat-mini {
+        padding: 0.65rem 1.1rem;
+        background: var(--white);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--gray-200);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .stat-mini-val {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--blue);
+        font-family: 'DM Mono', monospace;
+    }
+
+    .stat-mini-label {
+        font-size: 0.8rem;
+        color: var(--gray-400);
+    }
+
+    /* TABLE */
+    .table-container {
+        overflow-x: auto;
+        border-radius: var(--radius);
+        border: 1px solid var(--gray-200);
+        box-shadow: var(--shadow-sm);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        background: white;
+    }
+
+    thead th {
+        background: var(--navy);
+        color: white;
+        padding: 0.875rem 0.75rem;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        letter-spacing: 0.02em;
+    }
+
+    thead th:first-child { border-radius: var(--radius) 0 0 0; width: 50px; text-align: center; }
+
+    tbody tr {
+        border-bottom: 1px solid var(--gray-100);
+        transition: background 0.15s;
+    }
+
+    tbody tr:nth-child(even) { background: var(--gray-50); }
+    tbody tr:hover { background: #eff6ff !important; }
+    tbody tr.automated { background: #f0fdf4 !important; }
+
+    td {
+        padding: 0.75rem;
+        vertical-align: top;
+        color: var(--gray-800);
+        line-height: 1.5;
+        max-width: 240px;
+    }
+
+    td:first-child {
+        text-align: center;
+        font-weight: 700;
+        font-family: 'DM Mono', monospace;
+        color: var(--gray-400);
+        font-size: 0.75rem;
+    }
+
+    .uc-id {
+        font-weight: 700;
+        font-family: 'DM Mono', monospace;
+        color: var(--navy);
+        font-size: 0.875rem;
+    }
+
+    .cell-text {
+        color: var(--gray-600);
+        font-size: 0.83rem;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .automated-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0.15rem 0.5rem;
+        background: #dcfce7;
+        color: #166534;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    /* Editable cell */
+    [contenteditable="true"] {
+        outline: none;
+        border-radius: 4px;
+        padding: 2px 4px;
+        min-height: 1.2em;
+    }
+    [contenteditable="true"]:focus {
+        background: #fffbeb;
+        box-shadow: 0 0 0 2px #f59e0b;
+    }
+
+    /* PAGINATION */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .page-btn {
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--radius-sm);
+        border: 1.5px solid var(--gray-200);
+        background: white;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-family: 'DM Sans', sans-serif;
+        transition: all 0.2s;
+    }
+
+    .page-btn:hover, .page-btn.active {
+        border-color: var(--blue);
+        color: var(--blue);
+        background: #eff6ff;
+    }
+
+    .page-btn:disabled {
+        opacity: 0.4;
+        cursor: default;
+    }
+
+    .save-indicator {
+        display: none;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.8rem;
+        color: var(--green);
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <div class="page-title">👁️ Prévisualisation</div>
+        <div class="page-subtitle">{{ job.source_filename }}</div>
+    </div>
+    <div class="actions-bar">
+        <div class="save-indicator" id="saveIndicator">✅ Modifications sauvegardées</div>
+        <button class="btn btn-outline" onclick="saveEdits()">💾 Sauvegarder</button>
+        <a href="{% url 'core:index' %}" class="btn btn-outline">← Retour</a>
+        <a href="{% url 'core:generate' job.id %}" class="btn btn-success btn-lg">
+            📥 Télécharger l'Excel
+        </a>
+    </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-mini">
+    <div class="stat-mini">
+        <span style="font-size:1.2rem;">📋</span>
+        <div>
+            <div class="stat-mini-val">{{ job.use_cases_count }}</div>
+            <div class="stat-mini-label">Use Cases extraits</div>
+        </div>
+    </div>
+    <div class="stat-mini">
+        <span style="font-size:1.2rem;">🤖</span>
+        <div>
+            <div class="stat-mini-val" id="automatedCount">0</div>
+            <div class="stat-mini-label">Cas automatisés</div>
+        </div>
+    </div>
+    <div class="stat-mini">
+        <span style="font-size:1.2rem;">📄</span>
+        <div>
+            <div class="stat-mini-val">{{ job.source_filename|slice:":20" }}</div>
+            <div class="stat-mini-label">Source</div>
+        </div>
+    </div>
+    <div class="stat-mini">
+        <span style="font-size:1.2rem;">🕒</span>
+        <div>
+            <div class="stat-mini-val">{{ job.created_at|date:"H:i" }}</div>
+            <div class="stat-mini-label">{{ job.created_at|date:"d/m/Y" }}</div>
+        </div>
+    </div>
+</div>
+
+<!-- TABLE -->
+<div class="card" style="padding: 0;">
+    <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--gray-200); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+        <div style="font-weight:700; color:var(--navy); font-size:0.95rem;">📋 Use Cases extraits</div>
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+            <span class="text-xs text-muted">Cliquez sur une cellule pour modifier</span>
+            <label style="display:flex; align-items:center; gap:6px; font-size:0.85rem; cursor:pointer;">
+                <input type="checkbox" id="showAutomatedOnly" style="cursor:pointer;"> Automatisés seulement
+            </label>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="ucTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Use Case</th>
+                    <th>Description</th>
+                    <th>Préconditions</th>
+                    <th>Étapes</th>
+                    <th>Résultats Attendus</th>
+                    <th>Résultats Observés</th>
+                    <th>Statut</th>
+                    <th>Auto.</th>
+                </tr>
+            </thead>
+            <tbody id="ucTableBody">
+                {% for uc in use_cases %}
+                <tr data-id="{{ uc.id }}" data-automated="{{ uc.is_automated|yesno:'true,false' }}" class="{% if uc.is_automated %}automated{% endif %}">
+                    <td>{{ uc.order }}</td>
+                    <td><div class="uc-id" contenteditable="true" data-field="use_case_id">{{ uc.use_case_id }}</div></td>
+                    <td><div class="cell-text" contenteditable="true" data-field="description">{{ uc.description }}</div></td>
+                    <td><div class="cell-text" contenteditable="true" data-field="preconditions">{{ uc.preconditions }}</div></td>
+                    <td><div class="cell-text" contenteditable="true" data-field="steps">{{ uc.steps }}</div></td>
+                    <td><div class="cell-text" contenteditable="true" data-field="expected_results">{{ uc.expected_results }}</div></td>
+                    <td><div class="cell-text" contenteditable="true" data-field="observed_results">{{ uc.observed_results }}</div></td>
+                    <td>
+                        <select data-field="status" style="font-size:0.8rem; border:1.5px solid var(--gray-200); border-radius:6px; padding:0.2rem 0.4rem; font-family:'DM Sans',sans-serif;">
+                            <option value="À tester" {% if uc.status == "À tester" %}selected{% endif %}>À tester</option>
+                            <option value="En cours" {% if uc.status == "En cours" %}selected{% endif %}>En cours</option>
+                            <option value="Passé" {% if uc.status == "Passé" %}selected{% endif %}>✅ Passé</option>
+                            <option value="Échoué" {% if uc.status == "Échoué" %}selected{% endif %}>❌ Échoué</option>
+                            <option value="Bloqué" {% if uc.status == "Bloqué" %}selected{% endif %}>🚫 Bloqué</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="checkbox" data-field="is_automated" {% if uc.is_automated %}checked{% endif %}
+                            style="cursor:pointer; width:16px; height:16px;">
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Bottom CTA -->
+<div style="display:flex; justify-content:center; margin-top:2rem; gap:1rem; flex-wrap:wrap;">
+    <a href="{% url 'core:index' %}" class="btn btn-outline">← Nouvelle conversion</a>
+    <a href="{% url 'core:generate' job.id %}" class="btn btn-success btn-lg">
+        📥 Générer et télécharger l'Excel
+    </a>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const useCasesData = {{ use_cases_json|safe }};
+const jobId = "{{ job.id }}";
+
+// Count automated
+function updateAutomatedCount() {
+    const count = document.querySelectorAll('tr[data-automated="true"]').length;
+    document.getElementById('automatedCount').textContent = count;
+}
+updateAutomatedCount();
+
+// Toggle automated checkbox
+document.querySelectorAll('input[data-field="is_automated"]').forEach(cb => {
+    cb.addEventListener('change', function() {
+        const row = this.closest('tr');
+        if (this.checked) {
+            row.dataset.automated = 'true';
+            row.classList.add('automated');
+        } else {
+            row.dataset.automated = 'false';
+            row.classList.remove('automated');
+        }
+        updateAutomatedCount();
+    });
+});
+
+// Filter automated only
+document.getElementById('showAutomatedOnly').addEventListener('change', function() {
+    document.querySelectorAll('#ucTableBody tr').forEach(row => {
+        if (this.checked && row.dataset.automated !== 'true') {
+            row.style.display = 'none';
+        } else {
+            row.style.display = '';
+        }
+    });
+});
+
+// Save edits
+async function saveEdits() {
+    const rows = document.querySelectorAll('#ucTableBody tr');
+    const payload = { use_cases: [] };
+
+    rows.forEach(row => {
+        const ucId = row.dataset.id;
+        const uc = { id: ucId };
+
+        row.querySelectorAll('[data-field]').forEach(el => {
+            const field = el.dataset.field;
+            if (el.tagName === 'SELECT') {
+                uc[field] = el.value;
+            } else if (el.tagName === 'INPUT' && el.type === 'checkbox') {
+                uc[field] = el.checked;
+            } else {
+                uc[field] = el.textContent.trim();
+            }
+        });
+
+        payload.use_cases.push(uc);
+    });
+
+    try {
+        const resp = await fetch(`/preview/${jobId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const data = await resp.json();
+        const indicator = document.getElementById('saveIndicator');
+        indicator.style.display = 'flex';
+        setTimeout(() => { indicator.style.display = 'none'; }, 3000);
+    } catch (e) {
+        alert('Erreur lors de la sauvegarde : ' + e.message);
+    }
+}
+
+function getCookie(name) {
+    const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+}
+</script>
+{% endblock %}
