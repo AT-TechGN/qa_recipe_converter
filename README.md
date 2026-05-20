@@ -1,22 +1,26 @@
-# 📋 QA Recipe Converter
+# 🧪 QA Recipe Converter v2.0
 
-> **Convertissez automatiquement vos documents Word de recette en fichiers Excel structurés.**
+> **Convertissez automatiquement vos documents Word de recette en fichiers Excel structurés, scripts Gherkin et projets Cypress.**
 
-Application web Django permettant aux testeurs QA d'automatiser la conversion des tableaux de cas de tests (Use Cases) depuis des fichiers Word (.docx) vers des fichiers Excel (.xlsx) professionnels.
+Application web Django permettant aux testeurs QA d'automatiser la conversion des cas de tests depuis des fichiers Word (.docx) vers des fichiers Excel professionnels, et de générer des scripts d'automatisation Cypress/Gherkin en un clic.
 
 ---
 
 ## ✨ Fonctionnalités
 
-| Fonctionnalité | Description |
-|---|---|
-| **Upload Word** | Glisser-déposer ou sélection classique `.docx` / `.doc` |
-| **Détection intelligente** | Reconnaissance automatique des colonnes (insensible à la casse, accents, variantes) |
-| **Fusion de cellules** | Gestion automatique des cellules fusionnées |
-| **Prévisualisation** | Tableau interactif éditable avant export |
-| **Export Excel** | 2 feuilles : *Use Cases* + *Cas automatisé*, mise en forme professionnelle |
-| **Recherche fichiers** | Recherche de fichiers `.docx`/`.xlsx` sur la machine locale via API |
-| **Sécurité** | Fichiers supprimés automatiquement après 1 heure |
+| Fonctionnalité | Description | Version |
+|---|---|---|
+| **Upload Word** | Glisser-déposer ou sélection `.docx` / `.doc` | v1.0 |
+| **Détection intelligente** | Reconnaissance automatique des colonnes | v1.0 |
+| **Fusion de cellules** | Gestion automatique des cellules fusionnées | v1.0 |
+| **Prévisualisation éditable** | Tableau interactif éditable avant export | v1.0 |
+| **Export Excel** | 2 feuilles : *Use Cases* + *Cas automatisé* | v1.0 |
+| **Recherche fichiers** | Recherche `.docx`/`.xlsx` sur la machine locale | v1.0 |
+| **Scripts Gherkin** 🆕 | Génération `.feature` BDD/Cucumber par UC automatisable | v2.0 |
+| **Projet Cypress** 🆕 | Projet Cypress complet avec step definitions | v2.0 |
+| **Ouvrir VS Code** 🆕 | Ouvre le projet Cypress dans VS Code | v2.0 |
+| **UI redesignée** 🆕 | Interface professionnelle Inter + JetBrains Mono | v2.0 |
+| **Sécurité** | Fichiers supprimés automatiquement après 1 heure | v1.0 |
 
 ---
 
@@ -34,29 +38,65 @@ qa_recipe_converter/
 ├── apps/
 │   ├── core/                # App principale (modèles, vues, forms)
 │   │   ├── models.py        # ConversionJob, ExtractedUseCase
-│   │   ├── views.py         # Upload, Preview, Generate, Result
+│   │   ├── views.py         # Upload, Preview, Generate, Gherkin, VSCode, Result
 │   │   ├── forms.py         # Validation upload
-│   │   └── admin.py
-│   ├── parser/              # Moteur de parsing
-│   │   ├── docx_parser.py   # Extraction Word → dict
-│   │   ├── excel_generator.py # Génération Excel professionnel
-│   │   └── file_searcher.py # Recherche fichiers locale
+│   │   └── urls.py          # Routes
+│   ├── parser/              # Moteur de parsing & génération
+│   │   ├── docx_parser.py        # Extraction Word → dict
+│   │   ├── excel_generator.py    # Génération Excel professionnel
+│   │   ├── gherkin_generator.py  # 🆕 Génération Gherkin + Cypress
+│   │   └── file_searcher.py      # Recherche fichiers locale
 │   └── api/                 # API REST (DRF)
 │       ├── serializers.py
 │       ├── views.py
 │       └── urls.py
 ├── templates/
-│   ├── base.html
+│   ├── base.html            # 🆕 Design system complet (Inter, JetBrains Mono)
 │   └── core/
-│       ├── index.html       # Page upload
-│       ├── preview.html     # Prévisualisation & édition
-│       └── result.html      # Téléchargement
-├── tests/                   # Suite de tests (52 tests, ~76% coverage)
+│       ├── index.html       # 🆕 Page upload redesignée
+│       ├── preview.html     # 🆕 Prévisualisation + panel export Gherkin/Cypress
+│       └── result.html      # 🆕 Page résultat avec tous les exports
+├── tests/                   # Suite de tests
 ├── manage.py
 ├── requirements.txt
 ├── Dockerfile
-├── docker-compose.yml
-└── pytest.ini
+└── docker-compose.yml
+```
+
+---
+
+## 🔄 Pipeline de conversion
+
+```
+Word (.docx)
+    │
+    ▼
+┌─────────────────────┐
+│   DocxParser        │  → Extraction des tableaux UC
+│   (python-docx)     │
+└─────────────────────┘
+    │
+    ▼
+┌─────────────────────┐
+│   Preview éditable  │  → Interface web éditable
+│   (Django views)    │  → Marquage des cas automatisables
+└─────────────────────┘
+    │
+    ├──────────────────────────────────────────┐
+    ▼                                          ▼
+┌─────────────────────┐          ┌─────────────────────────────┐
+│   ExcelGenerator    │          │    GherkinGenerator (NEW)   │
+│   (openpyxl)        │          │    - .feature files (BDD)   │
+│   → .xlsx           │          │    - Projet Cypress (.zip)  │
+└─────────────────────┘          │    - Step definitions .js   │
+                                 └─────────────────────────────┘
+                                              │
+                                              ▼
+                                 ┌─────────────────────────────┐
+                                 │    VS Code (optionnel)      │
+                                 │    - Ouverture automatique  │
+                                 │    - `code /projet/path`    │
+                                 └─────────────────────────────┘
 ```
 
 ---
@@ -66,63 +106,88 @@ qa_recipe_converter/
 ### Option 1 — Docker (recommandé)
 
 ```bash
-# 1. Cloner le projet
-git clone <repo-url>
+git clone https://github.com/AT-TechGN/qa_recipe_converter.git
 cd qa_recipe_converter
-
-# 2. Copier et configurer l'environnement
 cp .env.example .env
-
-# 3. Lancer avec Docker Compose
 docker-compose up --build
-
-# 4. Appliquer les migrations (premier démarrage)
 docker-compose exec web python manage.py migrate
-
-# 5. (Optionnel) Créer un super-utilisateur admin
-docker-compose exec web python manage.py createsuperuser
 ```
 
 L'application est disponible sur **http://localhost:8000**
 
----
-
-### Option 2 — Développement local (sans Docker)
-
-#### Prérequis
-- Python 3.12+
-- pip
+### Option 2 — Développement local
 
 ```bash
-# 1. Cloner le projet
-git clone <repo-url>
+git clone https://github.com/AT-TechGN/qa_recipe_converter.git
 cd qa_recipe_converter
-
-# 2. Créer et activer un environnement virtuel
 python -m venv .venv
-source .venv/bin/activate        # Linux/macOS
-# .venv\Scripts\activate         # Windows
-
-# 3. Installer les dépendances
+source .venv/bin/activate       # Linux/macOS
+# .venv\Scripts\activate        # Windows
 pip install -r requirements.txt
-
-# 4. Configurer l'environnement
 cp .env.example .env
-
-# 5. Créer le dossier base de données
 mkdir -p db
-
-# 6. Appliquer les migrations
 python manage.py migrate --settings=config.settings.development
-
-# 7. Créer un superutilisateur (optionnel)
-python manage.py createsuperuser --settings=config.settings.development
-
-# 8. Lancer le serveur de développement
 python manage.py runserver --settings=config.settings.development
 ```
 
-L'application est disponible sur **http://127.0.0.1:8000**
+---
+
+## 🌲 Utilisation des nouvelles fonctionnalités
+
+### 1. Génération Gherkin
+
+Après l'upload et la prévisualisation :
+1. Dans la colonne **Auto.**, activez le toggle pour chaque cas automatisable
+2. Cliquez sur **💾 Sauvegarder**
+3. Dans le panneau d'export, cliquez sur **📝 Scripts Gherkin** pour télécharger un ZIP de fichiers `.feature`
+
+Exemple de fichier généré :
+
+```gherkin
+# Fichier généré automatiquement par QA Recipe Converter
+# Use Case : UC001
+
+Feature: UC001 — Connexion utilisateur
+
+  Background:
+    Given L'utilisateur est sur la page de connexion
+
+  Scenario: Connexion utilisateur
+
+    When L'utilisateur saisit son email et son mot de passe
+    And L'utilisateur clique sur le bouton "Se connecter"
+    Then L'utilisateur est redirigé vers le tableau de bord
+    And Un message de bienvenue est affiché
+```
+
+### 2. Projet Cypress
+
+Cliquez sur **🌲 Projet Cypress** pour télécharger un projet Cypress complet prêt à démarrer :
+
+```bash
+# Après extraction du ZIP :
+cd cypress_project/
+npm install
+npm run cy:open   # Mode interactif
+npm run cy:run    # Mode headless
+```
+
+Structure du projet généré :
+```
+cypress/
+├── e2e/
+│   ├── uc001_connexion.feature         # Scénario Gherkin
+│   └── step_definitions/
+│       └── uc001_connexion.js          # Steps à implémenter
+├── fixtures/
+└── support/
+cypress.config.js
+package.json
+```
+
+### 3. Ouvrir dans VS Code
+
+Cliquez sur **🖥️ Ouvrir VS Code** : le projet Cypress est extrait dans un dossier temporaire et VS Code s'ouvre automatiquement (si installé avec la commande `code` dans le PATH).
 
 ---
 
@@ -132,50 +197,14 @@ L'application est disponible sur **http://127.0.0.1:8000**
 # Lancer tous les tests
 python -m pytest tests/
 
-# Avec rapport de couverture
+# Avec couverture
 python -m pytest tests/ --cov=apps --cov-report=term-missing
 
-# Rapport HTML de couverture
-python -m pytest tests/ --cov=apps --cov-report=html
-# → Ouvrir htmlcov/index.html
-
-# Un module spécifique
+# Module spécifique
 python -m pytest tests/test_docx_parser.py -v
-python -m pytest tests/test_excel_generator.py -v
-python -m pytest tests/test_models_views.py -v
-python -m pytest tests/test_file_searcher.py -v
 ```
 
-**Résultats actuels :** 52 tests ✅ | Couverture métier : 88–100%
-
----
-
-## 🔧 Commandes Django utiles
-
-```bash
-# Migrations
-python manage.py makemigrations
-python manage.py migrate
-
-# Shell Django interactif
-python manage.py shell
-
-# Vider les fichiers anciens (> 1h)
-python manage.py shell -c "
-from apps.core.models import ConversionJob
-from django.utils import timezone
-from datetime import timedelta
-old = ConversionJob.objects.filter(created_at__lt=timezone.now()-timedelta(hours=1))
-print(f'{old.count()} tâches à supprimer')
-old.delete()
-"
-
-# Vérifier la configuration
-python manage.py check
-
-# Collecter les fichiers statiques (production)
-python manage.py collectstatic --noinput --settings=config.settings.production
-```
+**Résultats :** 52 tests ✅ | Couverture métier : 88–100%
 
 ---
 
@@ -190,56 +219,6 @@ python manage.py collectstatic --noinput --settings=config.settings.production
 | `/api/jobs/<uuid>/use-cases/<uuid>/` | `PATCH` | Modifier un Use Case |
 | `/api/files/search/?q=<query>` | `GET` | Recherche fichiers locale |
 
-### Exemple d'upload via curl
-
-```bash
-curl -X POST http://localhost:8000/api/upload/ \
-  -F "word_file=@/chemin/vers/recette.docx"
-```
-
----
-
-## 📋 Modèles de données
-
-### ConversionJob
-| Champ | Type | Description |
-|---|---|---|
-| `id` | UUID | Identifiant unique |
-| `status` | Enum | PENDING / PROCESSING / DONE / ERROR |
-| `source_filename` | str | Nom du fichier Word source |
-| `word_file` | FileField | Fichier Word uploadé |
-| `result_file` | FileField | Fichier Excel généré |
-| `use_cases_count` | int | Nombre de UC extraits |
-| `error_message` | text | Message d'erreur éventuel |
-
-### ExtractedUseCase
-| Champ | Type | Description |
-|---|---|---|
-| `id` | UUID | Identifiant unique |
-| `job` | FK | Lien vers la tâche de conversion |
-| `order` | int | Ordre d'apparition |
-| `use_case_id` | str | Identifiant UC (ex: UC001) |
-| `description` | text | Description du cas |
-| `preconditions` | text | Prérequis |
-| `steps` | text | Étapes / Actions |
-| `expected_results` | text | Résultats attendus |
-| `observed_results` | text | Résultats observés |
-| `is_automated` | bool | Marqué comme automatisé |
-| `status` | Enum | À tester / En cours / Passé / Échoué / Bloqué |
-
----
-
-## ⚙️ Configuration (.env)
-
-```env
-SECRET_KEY=votre-secret-key-unique
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-DJANGO_SETTINGS_MODULE=config.settings.development
-MAX_UPLOAD_SIZE_MB=50
-FILE_RETENTION_HOURS=1
-```
-
 ---
 
 ## 📦 Stack technique
@@ -250,23 +229,17 @@ FILE_RETENTION_HOURS=1
 | BDD | SQLite | — |
 | Parsing Word | python-docx | 1.1.x |
 | Génération Excel | openpyxl | 3.1.x |
+| Génération Gherkin | Built-in | v2.0 |
+| Tests E2E | Cypress + Cucumber | 13.x |
 | API REST | Django REST Framework | 3.15.x |
 | Tests | pytest-django + coverage | — |
 | Serveur prod | gunicorn + whitenoise | — |
 | Conteneurisation | Docker + docker-compose | — |
-
----
-
-## 🔒 Sécurité
-
-- Les fichiers uploadés sont supprimés après **1 heure** (configurable via `FILE_RETENTION_HOURS`)
-- Validation stricte des extensions et de la taille (max 50 MB)
-- Protection CSRF sur tous les formulaires
-- En production : HTTPS recommandé, `DEBUG=False`, `SECRET_KEY` sécurisée
+| UI | Inter + JetBrains Mono | v2.0 |
 
 ---
 
 ## 👤 Auteur
 
 **Alseny Traoré** — Mai 2026  
-QA Recipe Converter v1.0
+QA Recipe Converter v2.0 — AT-TechGN

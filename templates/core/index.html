@@ -1,502 +1,505 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}QA Recipe Converter — Accueil{% endblock %}
+{% block title %}QA Recipe Converter — Convertir une recette{% endblock %}
 
 {% block extra_css %}
 <style>
+    /* HERO */
     .hero {
         text-align: center;
-        padding: 2.5rem 0 1.5rem;
+        padding: 3rem 1rem 2rem;
+        position: relative;
     }
 
-    .hero-badge {
+    .hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(37,99,235,0.06) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .hero-eyebrow {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: linear-gradient(135deg, #dbeafe, #e0f2fe);
-        color: #1e40af;
-        border: 1px solid #bfdbfe;
+        background: var(--brand-50);
+        color: var(--brand-600);
+        border: 1px solid var(--brand-100);
         border-radius: 20px;
         padding: 0.3rem 0.9rem;
-        font-size: 0.8rem;
+        font-size: 0.78rem;
         font-weight: 600;
-        margin-bottom: 1rem;
-        font-family: 'DM Mono', monospace;
-        letter-spacing: 0.03em;
+        margin-bottom: 1.25rem;
+        font-family: var(--font-mono);
+        letter-spacing: 0.04em;
     }
 
     .hero h1 {
-        font-size: 2.2rem;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
         font-weight: 800;
-        color: var(--navy);
-        letter-spacing: -0.04em;
-        line-height: 1.2;
-        margin-bottom: 0.75rem;
+        color: var(--brand-800);
+        letter-spacing: -0.05em;
+        line-height: 1.15;
+        margin-bottom: 0.875rem;
     }
 
-    .hero h1 span {
-        background: linear-gradient(135deg, #2563eb, #06b6d4);
+    .hero h1 .gradient-text {
+        background: linear-gradient(135deg, var(--brand-500) 0%, var(--cyan) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
     }
 
-    .hero p {
-        color: var(--gray-600);
-        font-size: 1.05rem;
-        max-width: 520px;
-        margin: 0 auto 2rem;
-        line-height: 1.6;
+    .hero-desc {
+        color: var(--slate-500);
+        font-size: 1rem;
+        max-width: 480px;
+        margin: 0 auto 2.5rem;
+        line-height: 1.7;
     }
 
-    .stats-row {
+    /* PIPELINE STEPS */
+    .pipeline {
         display: flex;
+        align-items: center;
         justify-content: center;
-        gap: 2rem;
-        margin-bottom: 2.5rem;
+        gap: 0.5rem;
+        margin-bottom: 3rem;
         flex-wrap: wrap;
     }
 
-    .stat-item {
-        text-align: center;
+    .pipeline-step {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0.45rem 0.9rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        font-family: var(--font-mono);
     }
 
-    .stat-value {
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: var(--blue);
-        font-family: 'DM Mono', monospace;
+    .pipeline-step.active {
+        background: var(--brand-500);
+        color: white;
+        box-shadow: 0 2px 8px rgba(37,99,235,0.3);
     }
 
-    .stat-label {
+    .pipeline-step.muted {
+        background: var(--slate-100);
+        color: var(--slate-400);
+    }
+
+    .pipeline-arrow {
+        color: var(--slate-300);
         font-size: 0.75rem;
-        color: var(--gray-400);
-        font-weight: 500;
     }
 
-    /* UPLOAD ZONE */
-    .upload-grid {
+    /* UPLOAD LAYOUT */
+    .upload-layout {
         display: grid;
-        grid-template-columns: 1fr 340px;
+        grid-template-columns: 1fr 320px;
         gap: 1.5rem;
         align-items: start;
     }
 
+    /* DROP ZONE */
     .drop-zone {
-        border: 2.5px dashed var(--gray-200);
-        border-radius: var(--radius);
-        padding: 3rem 2rem;
+        border: 2px dashed var(--slate-200);
+        border-radius: var(--radius-xl);
+        padding: 3.5rem 2rem;
         text-align: center;
         cursor: pointer;
-        transition: all 0.25s;
-        background: var(--gray-50);
+        transition: all 0.2s;
+        background: var(--white);
         position: relative;
         overflow: hidden;
     }
 
-    .drop-zone::before {
+    .drop-zone::after {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(135deg, rgba(37,99,235,0.03), rgba(6,182,212,0.03));
-        opacity: 0;
-        transition: opacity 0.25s;
+        background: radial-gradient(ellipse at 50% 0%, rgba(37,99,235,0.04) 0%, transparent 60%);
+        pointer-events: none;
     }
 
-    .drop-zone:hover, .drop-zone.dragging {
-        border-color: var(--blue);
-        background: #eff6ff;
+    .drop-zone:hover, .drop-zone.dragover {
+        border-color: var(--brand-400);
+        background: var(--brand-50);
+        box-shadow: var(--shadow-md);
     }
 
-    .drop-zone:hover::before, .drop-zone.dragging::before { opacity: 1; }
+    .drop-zone.dragover { border-style: solid; }
 
     .drop-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        display: block;
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(135deg, var(--brand-100), var(--cyan-light));
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 1.25rem;
+        box-shadow: 0 4px 12px rgba(37,99,235,0.12);
     }
 
     .drop-title {
-        font-size: 1.05rem;
+        font-size: 1.1rem;
         font-weight: 700;
-        color: var(--navy);
+        color: var(--brand-800);
         margin-bottom: 0.4rem;
     }
 
     .drop-hint {
         font-size: 0.85rem;
-        color: var(--gray-400);
-        margin-bottom: 1.25rem;
+        color: var(--slate-400);
+        margin-bottom: 1.5rem;
     }
+
+    .drop-formats {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .format-chip {
+        padding: 0.25rem 0.65rem;
+        border: 1px solid var(--slate-200);
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-family: var(--font-mono);
+        color: var(--slate-500);
+        background: var(--slate-50);
+        font-weight: 500;
+    }
+
+    #fileInput { display: none; }
 
     .file-selected {
         display: none;
         align-items: center;
         gap: 10px;
         padding: 0.75rem 1rem;
-        background: #dcfce7;
-        border-radius: var(--radius-sm);
-        font-size: 0.875rem;
-        color: #166534;
-        font-weight: 500;
-        margin-top: 1rem;
+        background: var(--brand-50);
+        border: 1px solid var(--brand-100);
+        border-radius: var(--radius);
+        margin-top: 1.25rem;
+        text-align: left;
     }
 
-    /* SEARCH PANEL */
-    .search-panel {
+    .file-selected.show { display: flex; }
+
+    .file-icon {
+        width: 36px;
+        height: 36px;
+        background: var(--brand-500);
+        border-radius: 8px;
         display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .search-input-wrap {
-        position: relative;
-    }
-
-    .search-input {
-        width: 100%;
-        padding: 0.65rem 1rem 0.65rem 2.5rem;
-        border: 1.5px solid var(--gray-200);
-        border-radius: var(--radius-sm);
-        font-family: 'DM Sans', sans-serif;
-        font-size: 0.9rem;
-        color: var(--gray-800);
-        transition: border-color 0.2s;
-        background: var(--white);
-    }
-
-    .search-input:focus {
-        outline: none;
-        border-color: var(--blue);
-        box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
-    }
-
-    .search-icon {
-        position: absolute;
-        left: 0.75rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--gray-400);
-        font-size: 1rem;
-    }
-
-    .search-results {
-        background: var(--white);
-        border: 1.5px solid var(--gray-200);
-        border-radius: var(--radius-sm);
-        max-height: 240px;
-        overflow-y: auto;
-        display: none;
-        box-shadow: var(--shadow-md);
-    }
-
-    .search-result-item {
-        padding: 0.65rem 1rem;
-        cursor: pointer;
-        border-bottom: 1px solid var(--gray-100);
-        transition: background 0.15s;
-    }
-
-    .search-result-item:hover { background: #eff6ff; }
-    .search-result-item:last-child { border-bottom: none; }
-
-    .result-name {
-        font-weight: 600;
-        font-size: 0.875rem;
-        color: var(--navy);
-    }
-
-    .result-path {
-        font-size: 0.75rem;
-        color: var(--gray-400);
-        font-family: 'DM Mono', monospace;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 280px;
-    }
-
-    .result-size {
-        font-size: 0.7rem;
-        color: var(--gray-400);
-        font-family: 'DM Mono', monospace;
-    }
-
-    /* RECENT JOBS */
-    .recent-list {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .recent-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.75rem 1rem;
-        border-radius: var(--radius-sm);
-        background: var(--gray-50);
-        border: 1px solid var(--gray-100);
-        transition: all 0.2s;
-    }
-
-    .recent-item:hover {
-        background: #eff6ff;
-        border-color: #bfdbfe;
-    }
-
-    .recent-filename {
-        font-weight: 600;
-        font-size: 0.875rem;
-        color: var(--navy);
-        font-family: 'DM Mono', monospace;
-    }
-
-    .recent-meta {
-        font-size: 0.75rem;
-        color: var(--gray-400);
-        margin-top: 2px;
-    }
-
-    /* PROGRESS */
-    .progress-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(15,35,66,0.7);
-        backdrop-filter: blur(4px);
-        z-index: 999;
         align-items: center;
         justify-content: center;
+        color: white;
+        font-size: 1rem;
+        flex-shrink: 0;
     }
 
-    .progress-box {
-        background: white;
-        border-radius: var(--radius);
-        padding: 2.5rem 3rem;
-        text-align: center;
-        max-width: 360px;
-        width: 90%;
-        box-shadow: var(--shadow-lg);
+    .file-name {
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: var(--brand-800);
+        font-family: var(--font-mono);
+        word-break: break-all;
     }
 
-    .spinner {
-        width: 48px;
-        height: 48px;
-        border: 4px solid var(--gray-200);
-        border-top-color: var(--blue);
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-        margin: 0 auto 1.25rem;
+    .file-size {
+        font-size: 0.75rem;
+        color: var(--slate-400);
+        margin-top: 1px;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 1rem; }
 
-    .progress-title {
+    .option-card {
+        background: var(--white);
+        border: 1px solid var(--slate-200);
+        border-radius: var(--radius-lg);
+        padding: 1.1rem 1.25rem;
+        box-shadow: var(--shadow-xs);
+    }
+
+    .option-label {
+        font-size: 0.8rem;
         font-weight: 700;
-        font-size: 1.1rem;
-        color: var(--navy);
-        margin-bottom: 0.5rem;
+        color: var(--slate-700);
+        margin-bottom: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
 
-    .progress-hint {
-        font-size: 0.85rem;
-        color: var(--gray-400);
+    .option-desc {
+        font-size: 0.78rem;
+        color: var(--slate-400);
+        margin-top: 0.35rem;
+        line-height: 1.5;
     }
 
-    /* FEATURES */
+    /* FEATURES GRID */
     .features-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
-        margin-top: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.875rem;
+        margin-top: 2.5rem;
     }
 
     .feature-card {
-        padding: 1.25rem;
-        border-radius: var(--radius-sm);
         background: var(--white);
-        border: 1px solid var(--gray-200);
-        text-align: center;
+        border: 1px solid var(--slate-100);
+        border-radius: var(--radius-lg);
+        padding: 1.1rem;
+        box-shadow: var(--shadow-xs);
+        transition: all 0.2s;
+    }
+
+    .feature-card:hover {
+        box-shadow: var(--shadow-md);
+        border-color: var(--brand-200, #bfdbfe);
+        transform: translateY(-2px);
     }
 
     .feature-icon {
-        font-size: 1.75rem;
-        margin-bottom: 0.5rem;
+        font-size: 1.5rem;
+        margin-bottom: 0.6rem;
     }
 
     .feature-title {
+        font-size: 0.85rem;
         font-weight: 700;
-        font-size: 0.9rem;
-        color: var(--navy);
+        color: var(--brand-800);
         margin-bottom: 0.25rem;
     }
 
     .feature-desc {
-        font-size: 0.8rem;
-        color: var(--gray-400);
+        font-size: 0.78rem;
+        color: var(--slate-500);
         line-height: 1.5;
     }
 
-    @media (max-width: 768px) {
-        .upload-grid { grid-template-columns: 1fr; }
-        .features-grid { grid-template-columns: 1fr; }
-        .hero h1 { font-size: 1.6rem; }
-        .stats-row { gap: 1rem; }
+    /* NEW badge */
+    .new-badge {
+        font-size: 0.6rem;
+        background: linear-gradient(135deg, var(--brand-500), var(--cyan));
+        color: white;
+        padding: 0.1rem 0.4rem;
+        border-radius: 8px;
+        font-weight: 700;
+        font-family: var(--font-mono);
+        vertical-align: middle;
+        margin-left: 4px;
+    }
+
+    /* RECENT JOBS */
+    .recent-job {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--slate-50);
+        gap: 0.75rem;
+    }
+
+    .recent-job:last-child { border-bottom: none; }
+
+    .recent-job-name {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--brand-800);
+        font-family: var(--font-mono);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
+
+    .recent-job-meta {
+        font-size: 0.75rem;
+        color: var(--slate-400);
+        margin-top: 2px;
+    }
+
+    /* SUBMIT BTN */
+    #submitBtn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.875rem;
+        font-size: 0.95rem;
+        border-radius: var(--radius-lg);
+    }
+
+    @media (max-width: 900px) {
+        .upload-layout { grid-template-columns: 1fr; }
+        .pipeline { gap: 0.25rem; }
+        .pipeline-step { padding: 0.3rem 0.6rem; font-size: 0.7rem; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- HERO -->
-<div class="hero">
-    <div class="hero-badge">✨ Automatisation QA</div>
-    <h1>Convertissez vos recettes<br><span>Word → Excel</span> en quelques secondes</h1>
-    <p>Importez votre document Word de recette et obtenez un fichier Excel structuré avec tous vos Use Cases, prêt à l'emploi.</p>
+<section class="hero">
+    <div class="hero-eyebrow">🚀 QA Automation Toolkit</div>
+    <h1>Convertissez vos recettes<br><span class="gradient-text">en scripts automatisés</span></h1>
+    <p class="hero-desc">
+        Uploadez votre fichier Word, obtenez un Excel structuré, des scripts Gherkin prêts à l'emploi et un projet Cypress complet — en quelques secondes.
+    </p>
 
-    <div class="stats-row">
-        <div class="stat-item">
-            <div class="stat-value">&gt;90%</div>
-            <div class="stat-label">Gain de temps</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-value">0%</div>
-            <div class="stat-label">Erreurs de copie</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-value">&lt;10s</div>
-            <div class="stat-label">Traitement (100 UC)</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-value">2</div>
-            <div class="stat-label">Feuilles Excel générées</div>
-        </div>
+    <!-- PIPELINE -->
+    <div class="pipeline">
+        <div class="pipeline-step active">📄 Word</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step active">📊 Excel</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step active">🌲 Gherkin</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step active">🌲 Cypress</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step muted">🖥️ VS Code</div>
     </div>
-</div>
+</section>
 
-<!-- MAIN UPLOAD AREA -->
-<div class="upload-grid">
-    <!-- LEFT: Upload form -->
-    <div class="card">
-        <div class="card-title">📤 Uploader un fichier Word</div>
-        <div class="card-subtitle">Formats acceptés : .docx, .doc — Taille max : 50 MB</div>
+<!-- UPLOAD SECTION -->
+<form method="post" enctype="multipart/form-data" id="uploadForm">
+    {% csrf_token %}
+    <div class="upload-layout">
 
-        <form method="post" enctype="multipart/form-data" id="uploadForm">
-            {% csrf_token %}
-
-            <!-- Drop Zone -->
-            <div class="drop-zone" id="dropZone" onclick="document.getElementById('wordFileInput').click()">
-                <span class="drop-icon">📄</span>
-                <div class="drop-title">Glissez votre fichier ici</div>
-                <div class="drop-hint">ou cliquez pour parcourir vos fichiers</div>
-                <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
-                    <span class="badge" style="background:#dbeafe; color:#1e40af;">.DOCX</span>
-                    <span class="badge" style="background:#dbeafe; color:#1e40af;">.DOC</span>
+        <!-- DROP ZONE -->
+        <div>
+            <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                <div class="drop-icon">📋</div>
+                <div class="drop-title">Déposer votre fichier Word ici</div>
+                <div class="drop-hint">ou cliquer pour parcourir</div>
+                <div class="drop-formats">
+                    <span class="format-chip">.docx</span>
+                    <span class="format-chip">.doc</span>
+                    <span class="format-chip">max 50 MB</span>
                 </div>
-                <div class="file-selected" id="fileSelectedInfo">
-                    <span>✅</span>
-                    <span id="fileSelectedName"></span>
-                </div>
+                <input type="file" id="fileInput" name="word_file" accept=".docx,.doc" required>
             </div>
-            <input type="file" id="wordFileInput" name="word_file" accept=".docx,.doc" style="display:none">
+
+            <!-- File preview -->
+            <div class="file-selected" id="filePreview">
+                <div class="file-icon">📄</div>
+                <div>
+                    <div class="file-name" id="fileName">—</div>
+                    <div class="file-size" id="fileSize">—</div>
+                </div>
+                <button type="button" onclick="clearFile()" class="btn btn-ghost btn-sm" style="margin-left:auto;">✕</button>
+            </div>
 
             {% if form.word_file.errors %}
-            <div class="alert alert-error mt-2">⚠️ {{ form.word_file.errors.0 }}</div>
+            <div class="alert alert-error mt-4">
+                ⚠️ {{ form.word_file.errors|join:", " }}
+            </div>
             {% endif %}
 
-            <!-- Optional template -->
-            <div style="margin-top: 1rem;">
-                <label style="font-size:0.85rem; font-weight:600; color:var(--gray-600); display:block; margin-bottom:0.4rem;">
-                    Template Excel (optionnel)
-                </label>
-                <input type="file" name="excel_template" accept=".xlsx"
-                    style="font-family:'DM Sans',sans-serif; font-size:0.85rem; color:var(--gray-600); width:100%;">
-            </div>
-
-            <!-- Submit -->
-            <div style="margin-top: 1.5rem;">
-                <button type="submit" class="btn btn-primary btn-lg w-full" id="submitBtn">
-                    ⚡ Lancer la conversion
-                </button>
-            </div>
-        </form>
-    </div>
-
-    <!-- RIGHT: Search + Recent -->
-    <div class="search-panel">
-        <div class="card">
-            <div class="card-title">🔍 Recherche de fichiers</div>
-            <div class="card-subtitle">Recherchez un fichier sur votre machine</div>
-
-            <div class="search-input-wrap">
-                <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" id="fileSearch" placeholder="recette_sprint_12..." autocomplete="off">
-            </div>
-            <div class="search-results" id="searchResults"></div>
-
-            <p class="text-xs text-muted mt-2">
-                Tapez au moins 2 caractères. Fichiers .docx, .doc et .xlsx.
-            </p>
+            <!-- SUBMIT -->
+            <button type="submit" id="submitBtn" class="btn btn-primary btn-lg mt-4" disabled>
+                <span id="submitIcon">⚡</span>
+                <span id="submitText">Convertir & Analyser</span>
+            </button>
         </div>
 
-        {% if recent_jobs %}
-        <div class="card">
-            <div class="card-title">🕒 Conversions récentes</div>
-            <div class="card-subtitle">Derniers fichiers traités</div>
-            <div class="recent-list">
-                {% for job in recent_jobs %}
-                <a href="{% url 'core:preview' job.id %}" style="text-decoration:none;">
-                    <div class="recent-item">
-                        <div>
-                            <div class="recent-filename">{{ job.source_filename|truncatechars:30 }}</div>
-                            <div class="recent-meta">{{ job.use_cases_count }} UC • {{ job.created_at|date:"d/m/Y H:i" }}</div>
-                        </div>
-                        <span class="badge badge-done">✓ Terminé</span>
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+
+            <!-- Template Excel -->
+            <div class="option-card">
+                <div class="option-label">📊 Template Excel <span class="badge badge-new">optionnel</span></div>
+                <input type="file" name="excel_template" accept=".xlsx"
+                    style="width:100%; font-size:0.8rem; padding:0.4rem; border:1px solid var(--slate-200); border-radius:var(--radius-sm); font-family:var(--font-mono); background: var(--slate-50);">
+                <div class="option-desc">Personnalisez la mise en forme de l'Excel généré.</div>
+            </div>
+
+            <!-- New features info -->
+            <div class="option-card" style="background: linear-gradient(135deg, #f0f9ff 0%, #f0fdf4 100%); border-color: var(--brand-100);">
+                <div class="option-label" style="color: var(--brand-600);">✨ Nouvelles fonctionnalités</div>
+                <div style="display:flex; flex-direction:column; gap:0.5rem; margin-top:0.25rem;">
+                    <div style="display:flex; align-items:center; gap:7px; font-size:0.8rem; color:var(--slate-600);">
+                        <span style="color:var(--green-500);">●</span>
+                        Scripts Gherkin / BDD
+                        <span class="new-badge">NEW</span>
                     </div>
-                </a>
+                    <div style="display:flex; align-items:center; gap:7px; font-size:0.8rem; color:var(--slate-600);">
+                        <span style="color:var(--green-500);">●</span>
+                        Projet Cypress complet
+                        <span class="new-badge">NEW</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:7px; font-size:0.8rem; color:var(--slate-600);">
+                        <span style="color:var(--green-500);">●</span>
+                        Ouvrir dans VS Code
+                        <span class="new-badge">NEW</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            {% if recent_jobs %}
+            <div class="option-card">
+                <div class="option-label">🕒 Conversions récentes</div>
+                {% for job in recent_jobs %}
+                <div class="recent-job">
+                    <div>
+                        <div class="recent-job-name" title="{{ job.source_filename }}">
+                            {{ job.source_filename|truncatechars:28 }}
+                        </div>
+                        <div class="recent-job-meta">{{ job.use_cases_count }} UC • {{ job.created_at|date:"d/m H:i" }}</div>
+                    </div>
+                    <a href="{% url 'core:preview' job.id %}" class="btn btn-ghost btn-sm">Voir →</a>
+                </div>
                 {% endfor %}
             </div>
-        </div>
-        {% endif %}
+            {% endif %}
 
-        <!-- Info box -->
-        <div class="card" style="background: linear-gradient(135deg, #0f2342, #1a3a6e); border:none; color:white;">
-            <div style="font-weight:700; margin-bottom:0.5rem; font-size:0.95rem;">💡 Comment ça marche ?</div>
-            <ol style="padding-left:1.25rem; font-size:0.83rem; line-height:1.9; color:rgba(255,255,255,0.8);">
-                <li>Uploadez votre fichier Word (.docx)</li>
-                <li>Vérifiez et corrigez les UC extraits</li>
-                <li>Téléchargez votre fichier Excel</li>
-            </ol>
         </div>
     </div>
-</div>
+</form>
 
-<!-- FEATURES -->
+<!-- FEATURES GRID -->
 <div class="features-grid">
     <div class="feature-card">
-        <div class="feature-icon">🧠</div>
+        <div class="feature-icon">🔍</div>
         <div class="feature-title">Détection intelligente</div>
-        <div class="feature-desc">Reconnaissance automatique des colonnes, insensible à la casse et aux variantes</div>
+        <div class="feature-desc">Colonnes reconnues automatiquement, insensible à la casse et aux variantes.</div>
     </div>
     <div class="feature-card">
         <div class="feature-icon">📊</div>
         <div class="feature-title">Excel professionnel</div>
-        <div class="feature-desc">2 feuilles : "Use Cases" et "Cas automatisé" avec mise en forme complète</div>
+        <div class="feature-desc">2 feuilles : Use Cases + Cas automatisés, mise en forme avancée.</div>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">🌲</div>
+        <div class="feature-title">Scripts Gherkin <span class="new-badge">NEW</span></div>
+        <div class="feature-desc">Génération automatique de fichiers .feature BDD/Cucumber.</div>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">🌲</div>
+        <div class="feature-title">Projet Cypress <span class="new-badge">NEW</span></div>
+        <div class="feature-desc">Projet Cypress complet avec step definitions prêtes à implémenter.</div>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">🖥️</div>
+        <div class="feature-title">Ouvrir VS Code <span class="new-badge">NEW</span></div>
+        <div class="feature-desc">Ouvrez le projet Cypress directement dans votre éditeur favori.</div>
     </div>
     <div class="feature-card">
         <div class="feature-icon">🔒</div>
-        <div class="feature-title">Sécurisé</div>
-        <div class="feature-desc">Fichiers supprimés automatiquement après 1 heure, aucun stockage permanent</div>
-    </div>
-</div>
-
-<!-- LOADING OVERLAY -->
-<div class="progress-overlay" id="progressOverlay">
-    <div class="progress-box">
-        <div class="spinner"></div>
-        <div class="progress-title">Analyse en cours…</div>
-        <div class="progress-hint">Extraction des Use Cases de votre document Word</div>
+        <div class="feature-title">Sécurité</div>
+        <div class="feature-desc">Fichiers supprimés automatiquement après 1h. Aucune donnée conservée.</div>
     </div>
 </div>
 
@@ -504,88 +507,65 @@
 
 {% block extra_js %}
 <script>
-// Drag & drop
 const dropZone = document.getElementById('dropZone');
-const fileInput = document.getElementById('wordFileInput');
-const fileInfo = document.getElementById('fileSelectedInfo');
-const fileName = document.getElementById('fileSelectedName');
+const fileInput = document.getElementById('fileInput');
+const filePreview = document.getElementById('filePreview');
+const submitBtn = document.getElementById('submitBtn');
 
-['dragenter', 'dragover'].forEach(e => {
-    dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.add('dragging'); });
+function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + ' o';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' Ko';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' Mo';
+}
+
+function onFileSelected(file) {
+    if (!file) return;
+    document.getElementById('fileName').textContent = file.name;
+    document.getElementById('fileSize').textContent = formatBytes(file.size);
+    filePreview.classList.add('show');
+    submitBtn.disabled = false;
+    submitBtn.style.background = '';
+    dropZone.style.borderColor = 'var(--green-500)';
+    dropZone.style.background = 'var(--green-100, #f0fdf4)';
+}
+
+function clearFile() {
+    fileInput.value = '';
+    filePreview.classList.remove('show');
+    submitBtn.disabled = true;
+    dropZone.style.borderColor = '';
+    dropZone.style.background = '';
+}
+
+fileInput.addEventListener('change', e => {
+    if (e.target.files[0]) onFileSelected(e.target.files[0]);
 });
-['dragleave', 'drop'].forEach(e => {
-    dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.remove('dragging'); });
-});
+
+// Drag & drop
+['dragenter', 'dragover'].forEach(e => dropZone.addEventListener(e, ev => {
+    ev.preventDefault();
+    dropZone.classList.add('dragover');
+}));
+['dragleave', 'drop'].forEach(e => dropZone.addEventListener(e, ev => {
+    ev.preventDefault();
+    dropZone.classList.remove('dragover');
+}));
 dropZone.addEventListener('drop', ev => {
     const file = ev.dataTransfer.files[0];
     if (file) {
         const dt = new DataTransfer();
         dt.items.add(file);
         fileInput.files = dt.files;
-        showFileSelected(file.name);
+        onFileSelected(file);
     }
 });
 
-fileInput.addEventListener('change', () => {
-    if (fileInput.files[0]) showFileSelected(fileInput.files[0].name);
-});
-
-function showFileSelected(name) {
-    fileName.textContent = name;
-    fileInfo.style.display = 'flex';
-}
-
-// Form submit → show loader
-document.getElementById('uploadForm').addEventListener('submit', function(e) {
-    if (!fileInput.files[0]) { e.preventDefault(); alert('Veuillez sélectionner un fichier Word.'); return; }
-    document.getElementById('progressOverlay').style.display = 'flex';
-});
-
-// File search
-let searchTimeout;
-const searchInput = document.getElementById('fileSearch');
-const searchResults = document.getElementById('searchResults');
-
-searchInput.addEventListener('input', function() {
-    clearTimeout(searchTimeout);
-    const q = this.value.trim();
-    if (q.length < 2) { searchResults.style.display = 'none'; return; }
-
-    searchTimeout = setTimeout(() => {
-        fetch(`/api/files/search/?q=${encodeURIComponent(q)}`)
-            .then(r => r.json())
-            .then(data => {
-                if (!data.results || data.results.length === 0) {
-                    searchResults.innerHTML = '<div class="search-result-item text-muted" style="font-size:0.85rem;">Aucun fichier trouvé</div>';
-                } else {
-                    searchResults.innerHTML = data.results.map(f => `
-                        <div class="search-result-item" onclick="selectFile('${f.path.replace(/'/g,"\\'")}', '${f.name.replace(/'/g,"\\'")}')">
-                            <div class="result-name">📄 ${f.name}</div>
-                            <div class="result-path">${f.path}</div>
-                            <div class="result-size">${f.size_human}</div>
-                        </div>
-                    `).join('');
-                }
-                searchResults.style.display = 'block';
-            })
-            .catch(() => { searchResults.style.display = 'none'; });
-    }, 350);
-});
-
-function selectFile(path, name) {
-    searchInput.value = name;
-    searchResults.style.display = 'none';
-    showFileSelected(name + ' (chemin: ' + path + ')');
-    // Note: For security, browsers can't auto-fill a file input with a path.
-    // Display the path so user knows what to upload manually.
-    document.querySelector('.drop-title').textContent = 'Fichier trouvé : ' + name;
-    document.querySelector('.drop-hint').textContent = path;
-}
-
-document.addEventListener('click', e => {
-    if (!searchResults.contains(e.target) && e.target !== searchInput) {
-        searchResults.style.display = 'none';
-    }
+// Loading state on submit
+document.getElementById('uploadForm').addEventListener('submit', function() {
+    if (!fileInput.files[0]) return;
+    submitBtn.disabled = true;
+    document.getElementById('submitIcon').textContent = '⏳';
+    document.getElementById('submitText').textContent = 'Analyse en cours…';
 });
 </script>
 {% endblock %}

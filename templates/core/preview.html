@@ -5,9 +5,10 @@
 
 {% block extra_css %}
 <style>
+    /* PAGE HEADER */
     .page-header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
         margin-bottom: 1.5rem;
         flex-wrap: wrap;
@@ -15,250 +16,490 @@
     }
 
     .page-title {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
         font-weight: 800;
-        color: var(--navy);
-        letter-spacing: -0.03em;
+        color: var(--brand-800);
+        letter-spacing: -0.04em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    .page-subtitle {
-        font-size: 0.875rem;
-        color: var(--gray-400);
-        margin-top: 0.2rem;
-        font-family: 'DM Mono', monospace;
+    .page-meta {
+        font-size: 0.8rem;
+        color: var(--slate-400);
+        margin-top: 0.25rem;
+        font-family: var(--font-mono);
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
 
-    .actions-bar {
+    /* ACTION GROUPS */
+    .action-groups {
         display: flex;
         gap: 0.75rem;
         align-items: center;
         flex-wrap: wrap;
     }
 
-    /* Stats row */
-    .stats-mini {
+    .action-group {
         display: flex;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-        flex-wrap: wrap;
-    }
-
-    .stat-mini {
-        padding: 0.65rem 1.1rem;
-        background: var(--white);
-        border-radius: var(--radius-sm);
-        border: 1px solid var(--gray-200);
-        display: flex;
+        gap: 0.4rem;
         align-items: center;
-        gap: 0.5rem;
+        padding: 0.3rem 0.4rem;
+        background: var(--slate-50);
+        border: 1px solid var(--slate-200);
+        border-radius: var(--radius);
     }
 
-    .stat-mini-val {
-        font-size: 1.2rem;
-        font-weight: 800;
-        color: var(--blue);
-        font-family: 'DM Mono', monospace;
+    .action-separator {
+        width: 1px;
+        height: 20px;
+        background: var(--slate-200);
     }
 
-    .stat-mini-label {
+    /* EXPORT PANEL */
+    .export-panel {
+        background: linear-gradient(135deg, var(--brand-800) 0%, var(--slate-950) 100%);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        color: white;
+        margin-bottom: 1.5rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-xl);
+    }
+
+    .export-panel::before {
+        content: '';
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 160px;
+        height: 160px;
+        background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .export-title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: rgba(255,255,255,0.9);
+        margin-bottom: 0.25rem;
+    }
+
+    .export-subtitle {
+        font-size: 0.78rem;
+        color: rgba(255,255,255,0.45);
+        margin-bottom: 1.25rem;
+        font-family: var(--font-mono);
+    }
+
+    .export-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .export-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 0.875rem 0.75rem;
+        background: rgba(255,255,255,0.07);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        color: white;
+        text-align: center;
+    }
+
+    .export-btn:hover {
+        background: rgba(255,255,255,0.14);
+        border-color: rgba(255,255,255,0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .export-btn .e-icon {
+        font-size: 1.4rem;
+        line-height: 1;
+    }
+
+    .export-btn .e-label {
         font-size: 0.8rem;
-        color: var(--gray-400);
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+    .export-btn .e-sub {
+        font-size: 0.68rem;
+        color: rgba(255,255,255,0.45);
+        font-family: var(--font-mono);
+    }
+
+    .export-btn.excel-btn {
+        background: rgba(16,185,129,0.15);
+        border-color: rgba(16,185,129,0.3);
+    }
+    .export-btn.excel-btn:hover {
+        background: rgba(16,185,129,0.25);
+        border-color: rgba(16,185,129,0.5);
+    }
+
+    .export-btn.vscode-btn {
+        background: rgba(124,58,237,0.15);
+        border-color: rgba(124,58,237,0.3);
+    }
+    .export-btn.vscode-btn:hover {
+        background: rgba(124,58,237,0.25);
+        border-color: rgba(124,58,237,0.5);
+    }
+
+    /* AUTO COUNT BADGE */
+    .auto-count-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 0.2rem 0.65rem;
+        background: rgba(16,185,129,0.2);
+        border: 1px solid rgba(16,185,129,0.4);
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #86efac;
+        font-family: var(--font-mono);
     }
 
     /* TABLE */
-    .table-container {
+    .table-wrapper {
         overflow-x: auto;
-        border-radius: var(--radius);
-        border: 1px solid var(--gray-200);
-        box-shadow: var(--shadow-sm);
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
     }
 
     table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 0.85rem;
+        font-size: 0.83rem;
         background: white;
     }
 
+    thead tr {
+        background: var(--brand-800);
+    }
+
     thead th {
-        background: var(--navy);
         color: white;
-        padding: 0.875rem 0.75rem;
+        padding: 0.875rem 0.875rem;
         text-align: left;
         font-weight: 600;
-        font-size: 0.8rem;
+        font-size: 0.78rem;
         white-space: nowrap;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.03em;
+        border-right: 1px solid rgba(255,255,255,0.07);
     }
 
-    thead th:first-child { border-radius: var(--radius) 0 0 0; width: 50px; text-align: center; }
+    thead th:last-child { border-right: none; }
+    thead th:first-child { width: 46px; text-align: center; }
 
     tbody tr {
-        border-bottom: 1px solid var(--gray-100);
-        transition: background 0.15s;
+        border-bottom: 1px solid var(--slate-100);
+        transition: background 0.12s;
     }
 
-    tbody tr:nth-child(even) { background: var(--gray-50); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:nth-child(even) { background: var(--slate-50); }
     tbody tr:hover { background: #eff6ff !important; }
-    tbody tr.automated { background: #f0fdf4 !important; }
+    tbody tr.is-automated { background: #f0fdf4 !important; }
+    tbody tr.is-automated:hover { background: #dcfce7 !important; }
 
     td {
-        padding: 0.75rem;
+        padding: 0.75rem 0.875rem;
         vertical-align: top;
-        color: var(--gray-800);
+        color: var(--slate-700);
         line-height: 1.5;
-        max-width: 240px;
+        max-width: 220px;
+        border-right: 1px solid var(--slate-50);
     }
 
-    td:first-child {
-        text-align: center;
-        font-weight: 700;
-        font-family: 'DM Mono', monospace;
-        color: var(--gray-400);
-        font-size: 0.75rem;
-    }
+    td:last-child { border-right: none; }
+    td:first-child { text-align: center; font-weight: 700; font-family: var(--font-mono); color: var(--slate-400); font-size: 0.75rem; }
 
-    .uc-id {
+    .uc-id-cell {
         font-weight: 700;
-        font-family: 'DM Mono', monospace;
-        color: var(--navy);
-        font-size: 0.875rem;
+        font-family: var(--font-mono);
+        color: var(--brand-600);
+        font-size: 0.85rem;
     }
 
     .cell-text {
-        color: var(--gray-600);
-        font-size: 0.83rem;
+        color: var(--slate-600);
+        font-size: 0.82rem;
         white-space: pre-wrap;
         word-break: break-word;
+        min-height: 1em;
     }
 
-    .automated-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 0.15rem 0.5rem;
-        background: #dcfce7;
-        color: #166534;
-        border-radius: 20px;
-        font-size: 0.7rem;
-        font-weight: 600;
-    }
-
-    /* Editable cell */
     [contenteditable="true"] {
         outline: none;
         border-radius: 4px;
         padding: 2px 4px;
         min-height: 1.2em;
+        display: block;
     }
     [contenteditable="true"]:focus {
         background: #fffbeb;
-        box-shadow: 0 0 0 2px #f59e0b;
+        box-shadow: 0 0 0 2px var(--amber-500);
     }
 
-    /* PAGINATION */
-    .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.5rem;
-        margin-top: 1.5rem;
-    }
-
-    .page-btn {
-        padding: 0.4rem 0.8rem;
+    /* STATUS SELECT */
+    .status-select {
+        font-size: 0.78rem;
+        border: 1.5px solid var(--slate-200);
         border-radius: var(--radius-sm);
-        border: 1.5px solid var(--gray-200);
-        background: white;
+        padding: 0.25rem 0.5rem;
+        font-family: var(--font-sans);
+        background: var(--white);
+        color: var(--slate-700);
         cursor: pointer;
-        font-size: 0.85rem;
-        font-family: 'DM Sans', sans-serif;
-        transition: all 0.2s;
+        transition: border-color 0.15s;
+        min-width: 100px;
+    }
+    .status-select:focus { border-color: var(--brand-400); outline: none; }
+
+    /* AUTO TOGGLE */
+    .toggle-auto {
+        position: relative;
+        width: 36px;
+        height: 20px;
+        cursor: pointer;
+    }
+    .toggle-auto input { opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+        position: absolute;
+        inset: 0;
+        background: var(--slate-200);
+        border-radius: 999px;
+        transition: background 0.2s;
+    }
+    .toggle-track::after {
+        content: '';
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: white;
+        top: 3px;
+        left: 3px;
+        transition: transform 0.2s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .toggle-auto input:checked + .toggle-track { background: var(--green-500); }
+    .toggle-auto input:checked + .toggle-track::after { transform: translateX(16px); }
+
+    /* AUTO BADGE */
+    .auto-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green-500);
+        display: inline-block;
+        flex-shrink: 0;
     }
 
-    .page-btn:hover, .page-btn.active {
-        border-color: var(--blue);
-        color: var(--blue);
-        background: #eff6ff;
-    }
-
-    .page-btn:disabled {
-        opacity: 0.4;
-        cursor: default;
-    }
-
+    /* SAVE INDICATOR */
     .save-indicator {
         display: none;
         align-items: center;
         gap: 6px;
         font-size: 0.8rem;
-        color: var(--green);
+        color: var(--green-500);
         font-weight: 600;
+    }
+
+    /* TOOLBAR */
+    .table-toolbar {
+        padding: 0.875rem 1.25rem;
+        border-bottom: 1px solid var(--slate-100);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .toolbar-left { display: flex; align-items: center; gap: 0.875rem; }
+    .toolbar-right { display: flex; align-items: center; gap: 0.75rem; }
+
+    .filter-chip {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0.3rem 0.7rem;
+        border-radius: 20px;
+        font-size: 0.78rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1.5px solid var(--slate-200);
+        background: white;
+        transition: all 0.15s;
+        user-select: none;
+    }
+    .filter-chip:hover { border-color: var(--brand-300); color: var(--brand-600); }
+    .filter-chip.active { background: var(--brand-50); border-color: var(--brand-400); color: var(--brand-600); }
+
+    /* VSCODE MODAL */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px);
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+        background: white;
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        max-width: 480px;
+        width: 90%;
+        box-shadow: var(--shadow-xl);
+        animation: modalIn 0.2s ease;
+    }
+    @keyframes modalIn {
+        from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-title { font-size: 1.1rem; font-weight: 800; color: var(--brand-800); margin-bottom: 0.5rem; }
+    .modal-desc  { font-size: 0.875rem; color: var(--slate-500); margin-bottom: 1.25rem; line-height: 1.6; }
+
+    @media (max-width: 900px) {
+        .action-groups { gap: 0.5rem; }
+        .export-grid { grid-template-columns: repeat(2, 1fr); }
     }
 </style>
 {% endblock %}
 
 {% block content %}
+<!-- PAGE HEADER -->
 <div class="page-header">
     <div>
         <div class="page-title">👁️ Prévisualisation</div>
-        <div class="page-subtitle">{{ job.source_filename }}</div>
+        <div class="page-meta">
+            <span class="auto-dot"></span>
+            <span class="font-mono">{{ job.source_filename }}</span>
+            <span>•</span>
+            <span>{{ job.created_at|date:"d/m/Y H:i" }}</span>
+        </div>
     </div>
-    <div class="actions-bar">
-        <div class="save-indicator" id="saveIndicator">✅ Modifications sauvegardées</div>
-        <button class="btn btn-outline" onclick="saveEdits()">💾 Sauvegarder</button>
-        <a href="{% url 'core:index' %}" class="btn btn-outline">← Retour</a>
-        <a href="{% url 'core:generate' job.id %}" class="btn btn-success btn-lg">
-            📥 Télécharger l'Excel
+    <div class="action-groups">
+        <div class="action-group">
+            <div class="save-indicator" id="saveIndicator">✅ Sauvegardé</div>
+            <button class="btn btn-outline btn-sm" onclick="saveEdits()">💾 Sauvegarder</button>
+        </div>
+        <div class="action-separator"></div>
+        <a href="{% url 'core:index' %}" class="btn btn-ghost btn-sm">← Retour</a>
+    </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-grid mb-6">
+    <div class="stat-box">
+        <div class="stat-icon stat-icon-blue">📋</div>
+        <div>
+            <div class="stat-value">{{ job.use_cases_count }}</div>
+            <div class="stat-label">Use Cases total</div>
+        </div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-icon stat-icon-green">🤖</div>
+        <div>
+            <div class="stat-value" id="automatedCount">{{ automated_count }}</div>
+            <div class="stat-label">Cas automatisables</div>
+        </div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-icon stat-icon-cyan">📊</div>
+        <div>
+            <div class="stat-value">{{ job.use_cases_count }}</div>
+            <div class="stat-label">Lignes Excel</div>
+        </div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-icon stat-icon-violet">🌲</div>
+        <div>
+            <div class="stat-value" id="featureCount">{{ automated_count }}</div>
+            <div class="stat-label">Fichiers .feature</div>
+        </div>
+    </div>
+</div>
+
+<!-- EXPORT PANEL -->
+<div class="export-panel mb-6">
+    <div class="flex items-center justify-between mb-4" style="flex-wrap:wrap; gap:0.5rem;">
+        <div>
+            <div class="export-title">⬇️ Exporter</div>
+            <div class="export-subtitle">Choisissez votre format d'export</div>
+        </div>
+        <div class="auto-count-badge">
+            <span id="exportAutoCount">{{ automated_count }}</span> cas automatisables
+        </div>
+    </div>
+    <div class="export-grid">
+        <!-- Excel -->
+        <a href="{% url 'core:generate' job.id %}" class="export-btn excel-btn">
+            <div class="e-icon">📊</div>
+            <div class="e-label">Excel complet</div>
+            <div class="e-sub">.xlsx • 2 feuilles</div>
         </a>
+
+        <!-- Gherkin features -->
+        <a href="{% url 'core:gherkin' job.id %}?mode=gherkin" class="export-btn" id="gherkinBtn">
+            <div class="e-icon">📝</div>
+            <div class="e-label">Scripts Gherkin</div>
+            <div class="e-sub">.feature • BDD</div>
+        </a>
+
+        <!-- Cypress project -->
+        <a href="{% url 'core:gherkin' job.id %}?mode=cypress" class="export-btn" id="cypressBtn">
+            <div class="e-icon">🌲</div>
+            <div class="e-label">Projet Cypress</div>
+            <div class="e-sub">.zip • complet</div>
+        </a>
+
+        <!-- VS Code -->
+        <button type="button" class="export-btn vscode-btn" onclick="openVSCode()">
+            <div class="e-icon">🖥️</div>
+            <div class="e-label">Ouvrir VS Code</div>
+            <div class="e-sub">Cypress + editor</div>
+        </button>
     </div>
 </div>
 
-<!-- Stats -->
-<div class="stats-mini">
-    <div class="stat-mini">
-        <span style="font-size:1.2rem;">📋</span>
-        <div>
-            <div class="stat-mini-val">{{ job.use_cases_count }}</div>
-            <div class="stat-mini-label">Use Cases extraits</div>
+<!-- TABLE CARD -->
+<div class="card">
+    <div class="table-toolbar">
+        <div class="toolbar-left">
+            <div class="card-title">📋 Use Cases extraits</div>
+            <span class="text-xs text-muted">Clic pour modifier</span>
         </div>
-    </div>
-    <div class="stat-mini">
-        <span style="font-size:1.2rem;">🤖</span>
-        <div>
-            <div class="stat-mini-val" id="automatedCount">0</div>
-            <div class="stat-mini-label">Cas automatisés</div>
-        </div>
-    </div>
-    <div class="stat-mini">
-        <span style="font-size:1.2rem;">📄</span>
-        <div>
-            <div class="stat-mini-val">{{ job.source_filename|slice:":20" }}</div>
-            <div class="stat-mini-label">Source</div>
-        </div>
-    </div>
-    <div class="stat-mini">
-        <span style="font-size:1.2rem;">🕒</span>
-        <div>
-            <div class="stat-mini-val">{{ job.created_at|date:"H:i" }}</div>
-            <div class="stat-mini-label">{{ job.created_at|date:"d/m/Y" }}</div>
-        </div>
-    </div>
-</div>
-
-<!-- TABLE -->
-<div class="card" style="padding: 0;">
-    <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--gray-200); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
-        <div style="font-weight:700; color:var(--navy); font-size:0.95rem;">📋 Use Cases extraits</div>
-        <div style="display:flex; gap:0.5rem; align-items:center;">
-            <span class="text-xs text-muted">Cliquez sur une cellule pour modifier</span>
-            <label style="display:flex; align-items:center; gap:6px; font-size:0.85rem; cursor:pointer;">
-                <input type="checkbox" id="showAutomatedOnly" style="cursor:pointer;"> Automatisés seulement
+        <div class="toolbar-right">
+            <label class="filter-chip" id="automatedFilter">
+                <input type="checkbox" id="showAutomatedOnly" style="display:none;">
+                🤖 Automatisés seulement
             </label>
+            <button class="btn btn-ghost btn-sm" onclick="toggleAllAutomated()">Tout cocher</button>
         </div>
     </div>
 
-    <div class="table-container">
+    <div class="table-wrapper">
         <table id="ucTable">
             <thead>
                 <tr>
@@ -275,26 +516,30 @@
             </thead>
             <tbody id="ucTableBody">
                 {% for uc in use_cases %}
-                <tr data-id="{{ uc.id }}" data-automated="{{ uc.is_automated|yesno:'true,false' }}" class="{% if uc.is_automated %}automated{% endif %}">
+                <tr data-id="{{ uc.id }}"
+                    data-automated="{{ uc.is_automated|yesno:'true,false' }}"
+                    class="{% if uc.is_automated %}is-automated{% endif %}">
                     <td>{{ uc.order }}</td>
-                    <td><div class="uc-id" contenteditable="true" data-field="use_case_id">{{ uc.use_case_id }}</div></td>
+                    <td><div class="uc-id-cell" contenteditable="true" data-field="use_case_id">{{ uc.use_case_id }}</div></td>
                     <td><div class="cell-text" contenteditable="true" data-field="description">{{ uc.description }}</div></td>
                     <td><div class="cell-text" contenteditable="true" data-field="preconditions">{{ uc.preconditions }}</div></td>
                     <td><div class="cell-text" contenteditable="true" data-field="steps">{{ uc.steps }}</div></td>
                     <td><div class="cell-text" contenteditable="true" data-field="expected_results">{{ uc.expected_results }}</div></td>
                     <td><div class="cell-text" contenteditable="true" data-field="observed_results">{{ uc.observed_results }}</div></td>
                     <td>
-                        <select data-field="status" style="font-size:0.8rem; border:1.5px solid var(--gray-200); border-radius:6px; padding:0.2rem 0.4rem; font-family:'DM Sans',sans-serif;">
-                            <option value="À tester" {% if uc.status == "À tester" %}selected{% endif %}>À tester</option>
-                            <option value="En cours" {% if uc.status == "En cours" %}selected{% endif %}>En cours</option>
-                            <option value="Passé" {% if uc.status == "Passé" %}selected{% endif %}>✅ Passé</option>
-                            <option value="Échoué" {% if uc.status == "Échoué" %}selected{% endif %}>❌ Échoué</option>
-                            <option value="Bloqué" {% if uc.status == "Bloqué" %}selected{% endif %}>🚫 Bloqué</option>
+                        <select class="status-select" data-field="status">
+                            <option value="À tester"  {% if uc.status == "À tester"  %}selected{% endif %}>🔵 À tester</option>
+                            <option value="En cours"  {% if uc.status == "En cours"  %}selected{% endif %}>🟡 En cours</option>
+                            <option value="Passé"     {% if uc.status == "Passé"     %}selected{% endif %}>✅ Passé</option>
+                            <option value="Échoué"    {% if uc.status == "Échoué"    %}selected{% endif %}>❌ Échoué</option>
+                            <option value="Bloqué"    {% if uc.status == "Bloqué"    %}selected{% endif %}>🚫 Bloqué</option>
                         </select>
                     </td>
                     <td>
-                        <input type="checkbox" data-field="is_automated" {% if uc.is_automated %}checked{% endif %}
-                            style="cursor:pointer; width:16px; height:16px;">
+                        <label class="toggle-auto">
+                            <input type="checkbox" data-field="is_automated" {% if uc.is_automated %}checked{% endif %}>
+                            <div class="toggle-track"></div>
+                        </label>
                     </td>
                 </tr>
                 {% endfor %}
@@ -303,99 +548,155 @@
     </div>
 </div>
 
-<!-- Bottom CTA -->
-<div style="display:flex; justify-content:center; margin-top:2rem; gap:1rem; flex-wrap:wrap;">
-    <a href="{% url 'core:index' %}" class="btn btn-outline">← Nouvelle conversion</a>
-    <a href="{% url 'core:generate' job.id %}" class="btn btn-success btn-lg">
-        📥 Générer et télécharger l'Excel
-    </a>
+<!-- VS CODE MODAL -->
+<div class="modal-overlay" id="vscodeModal">
+    <div class="modal">
+        <div class="modal-title">🖥️ Ouvrir dans VS Code</div>
+        <div class="modal-desc" id="vscodeModalDesc">
+            Génération du projet Cypress et tentative d'ouverture de VS Code…
+        </div>
+        <div class="code-block" id="vscodePathBlock" style="display:none; margin-bottom:1rem;"></div>
+        <div style="margin-top:1rem;">
+            <div class="option-label" style="font-size:0.8rem; color:var(--slate-600); margin-bottom:0.5rem;">Installation manuelle si VS Code n'est pas détecté :</div>
+            <div class="code-block" style="font-size:0.75rem;">
+# 1. Télécharger le projet Cypress (.zip) ci-dessus<br>
+# 2. Extraire le ZIP<br>
+# 3. Ouvrir dans VS Code :<br>
+code /chemin/vers/cypress_project/<br>
+<br>
+# 4. Installer les dépendances :<br>
+npm install<br>
+npm run cy:open
+            </div>
+        </div>
+        <div class="flex gap-3 mt-6" style="justify-content:flex-end;">
+            <a href="{% url 'core:gherkin' job.id %}?mode=cypress" class="btn btn-violet btn-sm">
+                📥 Télécharger le ZIP Cypress
+            </a>
+            <button class="btn btn-outline btn-sm" onclick="closeVSCodeModal()">Fermer</button>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
 
 {% block extra_js %}
 <script>
-const useCasesData = {{ use_cases_json|safe }};
 const jobId = "{{ job.id }}";
 
-// Count automated
+// ── Auto count ──────────────────────────────────────────────────────────────
 function updateAutomatedCount() {
     const count = document.querySelectorAll('tr[data-automated="true"]').length;
     document.getElementById('automatedCount').textContent = count;
+    document.getElementById('featureCount').textContent = count;
+    document.getElementById('exportAutoCount').textContent = count;
 }
-updateAutomatedCount();
 
-// Toggle automated checkbox
+// ── Toggle checkbox ──────────────────────────────────────────────────────────
 document.querySelectorAll('input[data-field="is_automated"]').forEach(cb => {
     cb.addEventListener('change', function() {
         const row = this.closest('tr');
         if (this.checked) {
             row.dataset.automated = 'true';
-            row.classList.add('automated');
+            row.classList.add('is-automated');
         } else {
             row.dataset.automated = 'false';
-            row.classList.remove('automated');
+            row.classList.remove('is-automated');
         }
         updateAutomatedCount();
     });
 });
 
-// Filter automated only
+// ── Filter automated only ────────────────────────────────────────────────────
+const filterChip = document.getElementById('automatedFilter');
 document.getElementById('showAutomatedOnly').addEventListener('change', function() {
+    filterChip.classList.toggle('active', this.checked);
     document.querySelectorAll('#ucTableBody tr').forEach(row => {
-        if (this.checked && row.dataset.automated !== 'true') {
-            row.style.display = 'none';
-        } else {
-            row.style.display = '';
-        }
+        row.style.display = (this.checked && row.dataset.automated !== 'true') ? 'none' : '';
     });
 });
+filterChip.addEventListener('click', function() {
+    const cb = document.getElementById('showAutomatedOnly');
+    cb.checked = !cb.checked;
+    cb.dispatchEvent(new Event('change'));
+});
 
-// Save edits
+// ── Toggle all automated ─────────────────────────────────────────────────────
+let allToggled = false;
+function toggleAllAutomated() {
+    allToggled = !allToggled;
+    document.querySelectorAll('input[data-field="is_automated"]').forEach(cb => {
+        cb.checked = allToggled;
+        cb.dispatchEvent(new Event('change'));
+    });
+}
+
+// ── Save edits ───────────────────────────────────────────────────────────────
 async function saveEdits() {
     const rows = document.querySelectorAll('#ucTableBody tr');
     const payload = { use_cases: [] };
-
     rows.forEach(row => {
-        const ucId = row.dataset.id;
-        const uc = { id: ucId };
-
+        const uc = { id: row.dataset.id };
         row.querySelectorAll('[data-field]').forEach(el => {
             const field = el.dataset.field;
-            if (el.tagName === 'SELECT') {
-                uc[field] = el.value;
-            } else if (el.tagName === 'INPUT' && el.type === 'checkbox') {
-                uc[field] = el.checked;
-            } else {
-                uc[field] = el.textContent.trim();
-            }
+            if (el.tagName === 'SELECT') uc[field] = el.value;
+            else if (el.tagName === 'INPUT' && el.type === 'checkbox') uc[field] = el.checked;
+            else uc[field] = el.textContent.trim();
         });
-
         payload.use_cases.push(uc);
     });
 
     try {
         const resp = await fetch(`/preview/${jobId}/`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken'),
-            },
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
             body: JSON.stringify(payload),
         });
-
         const data = await resp.json();
-        const indicator = document.getElementById('saveIndicator');
-        indicator.style.display = 'flex';
-        setTimeout(() => { indicator.style.display = 'none'; }, 3000);
+        if (data.success) {
+            const ind = document.getElementById('saveIndicator');
+            ind.style.display = 'flex';
+            showToast('Modifications sauvegardées ✅', 'success');
+            setTimeout(() => { ind.style.display = 'none'; }, 3500);
+        }
     } catch (e) {
-        alert('Erreur lors de la sauvegarde : ' + e.message);
+        showToast('Erreur lors de la sauvegarde', 'error');
     }
 }
 
-function getCookie(name) {
-    const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-    return v ? v[2] : null;
+// ── VS Code ──────────────────────────────────────────────────────────────────
+async function openVSCode() {
+    // First save, then open
+    await saveEdits();
+    document.getElementById('vscodeModal').classList.add('show');
+    document.getElementById('vscodeModalDesc').textContent = 'Génération du projet Cypress et ouverture de VS Code…';
+    document.getElementById('vscodePathBlock').style.display = 'none';
+
+    try {
+        const resp = await fetch(`/vscode/${jobId}/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+        });
+        const data = await resp.json();
+        document.getElementById('vscodeModalDesc').textContent = data.message;
+        if (data.project_path) {
+            const pathBlock = document.getElementById('vscodePathBlock');
+            pathBlock.style.display = 'block';
+            pathBlock.textContent = '📁 ' + data.project_path;
+        }
+        showToast(data.vscode_opened ? 'VS Code ouvert ! 🖥️' : 'Projet généré — voir le chemin ci-dessous', data.vscode_opened ? 'success' : 'info');
+    } catch (e) {
+        document.getElementById('vscodeModalDesc').textContent = 'Erreur : ' + e.message;
+        showToast('Erreur lors de l\'ouverture de VS Code', 'error');
+    }
 }
+
+function closeVSCodeModal() {
+    document.getElementById('vscodeModal').classList.remove('show');
+}
+
+document.getElementById('vscodeModal').addEventListener('click', function(e) {
+    if (e.target === this) closeVSCodeModal();
+});
 </script>
 {% endblock %}

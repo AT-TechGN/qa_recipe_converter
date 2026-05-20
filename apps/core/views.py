@@ -1,5 +1,7 @@
 import json
 import logging
+import subprocess
+import platform
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views import View
@@ -10,6 +12,11 @@ from .models import ConversionJob, ExtractedUseCase
 from .forms import UploadForm
 from apps.parser.docx_parser import DocxParser
 from apps.parser.excel_generator import ExcelGenerator
+from apps.parser.gherkin_generator import (
+    generate_cypress_project_zip,
+    generate_gherkin_only_zip,
+    generate_feature_file,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -86,9 +93,11 @@ class PreviewView(View):
     def get(self, request, job_id):
         job = get_object_or_404(ConversionJob, id=job_id)
         use_cases = job.use_cases.all()
+        automated_count = use_cases.filter(is_automated=True).count()
         return render(request, self.template_name, {
             'job': job,
             'use_cases': use_cases,
+            'automated_count': automated_count,
             'use_cases_json': json.dumps([{
                 'id': str(uc.id),
                 'order': uc.order,
@@ -143,9 +152,88 @@ class GenerateExcelView(View):
         return response
 
 
+class GenerateGherkinView(View):
+    """Download Gherkin .feature files as ZIP."""
+
+    def get(self, request, job_id):
+        job = get_object_or_404(ConversionJob, id=job_id, status=ConversionJob.Status.DONE)
+        use_cases = job.use_cases.all()
+        mode = request.GET.get('mode', 'gherkin')  # 'gherkin' or 'cypress'
+
+        if mode == 'cypress':
+            zip_buffer = generate_cypress_project_zip(use_cases)
+            filename = f"cypress_project_{job.source_filename.replace('.docx', '').replace('.doc', '')}.zip"
+        else:
+            zip_buffer = generate_gherkin_only_zip(use_cases)
+            filename = f"gherkin_features_{job.source_filename.replace('.docx', '').replace('.doc', '')}.zip"
+
+        response = HttpResponse(
+            zip_buffer.getvalue(),
+            content_type='application/zip'
+        )
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
+
+
+class OpenVSCodeView(View):
+    """
+    Attempt to open the generated Cypress project in VS Code.
+    Since the server runs on the user's machine (dev mode), we can call 'code' CLI.
+    Returns JSON with status.
+    """
+
+    def post(self, request, job_id):
+        job = get_object_or_404(ConversionJob, id=job_id, status=ConversionJob.Status.DONE)
+        use_cases = job.use_cases.all()
+
+        import tempfile, os
+        # Write the cypress project to a temp directory
+        project_dir = os.path.join(
+            tempfile.gettempdir(),
+            f"cypress_qa_{str(job.id)[:8]}"
+        )
+        os.makedirs(project_dir, exist_ok=True)
+
+        # Extract the ZIP into the temp dir
+        zip_buffer = generate_cypress_project_zip(use_cases)
+        import zipfile
+        with zipfile.ZipFile(zip_buffer, 'r') as zf:
+            zf.extractall(project_dir)
+
+        # Try to open VS Code
+        vscode_opened = False
+        vscode_path = project_dir
+        try:
+            sys_platform = platform.system()
+            if sys_platform == 'Windows':
+                subprocess.Popen(['code', project_dir], shell=True)
+            else:
+                subprocess.Popen(['code', project_dir])
+            vscode_opened = True
+        except FileNotFoundError:
+            vscode_opened = False
+        except Exception as e:
+            logger.warning(f"VS Code open failed: {e}")
+            vscode_opened = False
+
+        return JsonResponse({
+            'success': True,
+            'vscode_opened': vscode_opened,
+            'project_path': vscode_path,
+            'message': (
+                'VS Code ouvert avec succès !' if vscode_opened
+                else f'Projet généré dans : {vscode_path}\n(VS Code non détecté automatiquement)'
+            )
+        })
+
+
 class ResultView(View):
     template_name = 'core/result.html'
 
     def get(self, request, job_id):
         job = get_object_or_404(ConversionJob, id=job_id)
-        return render(request, self.template_name, {'job': job})
+        automated_count = job.use_cases.filter(is_automated=True).count()
+        return render(request, self.template_name, {
+            'job': job,
+            'automated_count': automated_count,
+        })
