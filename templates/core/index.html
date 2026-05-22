@@ -5,347 +5,369 @@
 
 {% block extra_css %}
 <style>
-    /* HERO */
-    .hero {
-        text-align: center;
-        padding: 3rem 1rem 2rem;
-        position: relative;
-    }
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero {
+    text-align: center;
+    padding: 2.5rem 1rem 1.5rem;
+    position: relative;
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37,99,235,0.07) 0%, transparent 70%);
+    pointer-events: none;
+}
+.hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--brand-50);
+    color: var(--brand-600);
+    border: 1px solid var(--brand-100);
+    border-radius: 20px;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.04em;
+}
+.hero h1 {
+    font-size: clamp(1.75rem, 4vw, 2.6rem);
+    font-weight: 800;
+    color: var(--brand-800);
+    letter-spacing: -0.05em;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+}
+.hero h1 .gradient-text {
+    background: linear-gradient(135deg, var(--brand-500) 0%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.hero-desc {
+    color: var(--slate-500);
+    font-size: 0.95rem;
+    max-width: 460px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+}
 
-    .hero::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(37,99,235,0.06) 0%, transparent 70%);
-        pointer-events: none;
-    }
+/* ── PIPELINE ─────────────────────────────────────────────── */
+.pipeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+}
+.pipeline-step {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+}
+.pipeline-step.active {
+    background: var(--brand-500);
+    color: white;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+}
+.pipeline-step.muted {
+    background: var(--slate-100);
+    color: var(--slate-400);
+}
+.pipeline-arrow { color: var(--slate-300); font-size: 0.75rem; }
 
-    .hero-eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: var(--brand-50);
-        color: var(--brand-600);
-        border: 1px solid var(--brand-100);
-        border-radius: 20px;
-        padding: 0.3rem 0.9rem;
-        font-size: 0.78rem;
-        font-weight: 600;
-        margin-bottom: 1.25rem;
-        font-family: var(--font-mono);
-        letter-spacing: 0.04em;
-    }
+/* ── UPLOAD LAYOUT ────────────────────────────────────────── */
+.upload-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 1.5rem;
+    align-items: start;
+}
 
-    .hero h1 {
-        font-size: clamp(1.8rem, 4vw, 2.8rem);
-        font-weight: 800;
-        color: var(--brand-800);
-        letter-spacing: -0.05em;
-        line-height: 1.15;
-        margin-bottom: 0.875rem;
-    }
+/* ── MAIN FORM CARD ───────────────────────────────────────── */
+.form-card {
+    background: var(--white);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+.form-card-section {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--slate-100);
+}
+.form-card-section:last-child { border-bottom: none; }
+.section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--slate-400);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.section-label .step-num {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--brand-500);
+    color: white;
+    font-size: 0.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
 
-    .hero h1 .gradient-text {
-        background: linear-gradient(135deg, var(--brand-500) 0%, var(--cyan) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
+/* ── DROP ZONE ────────────────────────────────────────────── */
+.drop-zone {
+    border: 2px dashed var(--slate-200);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--slate-50);
+    position: relative;
+}
+.drop-zone:hover, .drop-zone.dragover {
+    border-color: var(--brand-400);
+    background: var(--brand-50);
+    box-shadow: var(--shadow-md);
+}
+.drop-zone.has-file {
+    border-color: var(--green-500);
+    border-style: solid;
+    background: #f0fdf4;
+}
+.drop-icon {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, var(--brand-100), var(--cyan-light));
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.75rem;
+    margin: 0 auto 1rem;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.12);
+    transition: transform 0.2s;
+}
+.drop-zone:hover .drop-icon { transform: scale(1.05); }
+.drop-zone.has-file .drop-icon { background: linear-gradient(135deg, var(--green-100), #dcfce7); }
+.drop-title {
+    font-size: 0.95rem; font-weight: 700;
+    color: var(--brand-800); margin-bottom: 0.3rem;
+}
+.drop-hint { font-size: 0.8rem; color: var(--slate-400); margin-bottom: 1.25rem; }
+.drop-formats { display: flex; justify-content: center; gap: 0.4rem; flex-wrap: wrap; }
+.format-chip {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--slate-200);
+    border-radius: 5px;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    color: var(--slate-400);
+    background: var(--white);
+    font-weight: 500;
+}
+#fileInput { display: none; }
+.file-chosen {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 0.625rem 0.875rem;
+    background: var(--white);
+    border: 1px solid #bbf7d0;
+    border-radius: var(--radius);
+    margin-top: 1rem;
+    text-align: left;
+}
+.file-chosen.show { display: flex; }
+.file-icon-box {
+    width: 32px; height: 32px;
+    background: var(--green-500);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 0.9rem; flex-shrink: 0;
+}
+.file-name { font-weight: 600; font-size: 0.82rem; color: #065f46; font-family: var(--font-mono); word-break: break-all; }
+.file-meta { font-size: 0.72rem; color: var(--slate-400); }
 
-    .hero-desc {
-        color: var(--slate-500);
-        font-size: 1rem;
-        max-width: 480px;
-        margin: 0 auto 2.5rem;
-        line-height: 1.7;
-    }
+/* ── FORM INPUTS ──────────────────────────────────────────── */
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.875rem;
+    margin-bottom: 0.875rem;
+}
+.field-row.full { grid-template-columns: 1fr; }
+.field-group label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--slate-600);
+    margin-bottom: 0.35rem;
+}
+.field-group .field-hint {
+    font-size: 0.71rem;
+    color: var(--slate-400);
+    margin-top: 0.25rem;
+}
+.text-input {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
+    color: var(--slate-800);
+    background: var(--white);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+}
+.text-input:focus {
+    border-color: var(--brand-400);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+.text-input::placeholder { color: var(--slate-300); }
 
-    /* PIPELINE STEPS */
-    .pipeline {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        margin-bottom: 3rem;
-        flex-wrap: wrap;
-    }
+/* ── LOGO UPLOAD ──────────────────────────────────────────── */
+.logo-upload-zone {
+    border: 1.5px dashed var(--slate-200);
+    border-radius: var(--radius);
+    padding: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    background: var(--slate-50);
+    position: relative;
+}
+.logo-upload-zone:hover { border-color: var(--brand-400); background: var(--brand-50); }
+.logo-upload-zone.has-logo { border-color: var(--cyan); background: var(--cyan-light, #ecfeff); border-style: solid; }
+#logoInput { display: none; }
+.logo-preview-row {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 0.5rem;
+}
+.logo-preview-row.show { display: flex; }
+.logo-preview-thumb {
+    width: 48px; height: 32px;
+    object-fit: contain;
+    border-radius: 4px;
+    border: 1px solid var(--slate-200);
+    background: white;
+}
+.logo-preview-name { font-size: 0.78rem; font-weight: 600; color: #0e7490; font-family: var(--font-mono); }
+.logo-placeholder {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+    padding: 0.25rem 0;
+}
+.logo-placeholder-icon { font-size: 1.2rem; }
+.logo-placeholder-text { font-size: 0.75rem; color: var(--slate-400); font-weight: 500; }
+.logo-placeholder-sub { font-size: 0.68rem; color: var(--slate-300); font-family: var(--font-mono); }
 
-    .pipeline-step {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 0.45rem 0.9rem;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        font-family: var(--font-mono);
-    }
+/* ── SUBMIT AREA ──────────────────────────────────────────── */
+.submit-section {
+    padding: 1.25rem 1.5rem 1.5rem;
+    background: var(--slate-50);
+}
+#submitBtn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.875rem;
+    font-size: 0.95rem;
+    border-radius: var(--radius-lg);
+    transition: all 0.2s;
+}
+#submitBtn:not(:disabled):hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(37,99,235,0.3); }
 
-    .pipeline-step.active {
-        background: var(--brand-500);
-        color: white;
-        box-shadow: 0 2px 8px rgba(37,99,235,0.3);
-    }
+/* ── SIDEBAR ──────────────────────────────────────────────── */
+.sidebar { display: flex; flex-direction: column; gap: 1rem; }
+.sidebar-card {
+    background: var(--white);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-xs);
+}
+.sidebar-card-head {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--slate-100);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--brand-700);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.sidebar-card-body { padding: 0.875rem 1rem; }
 
-    .pipeline-step.muted {
-        background: var(--slate-100);
-        color: var(--slate-400);
-    }
+/* Feature list */
+.feature-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--slate-600);
+    line-height: 1.4;
+}
+.feature-item .fi-icon { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+.feature-item .fi-new {
+    font-size: 0.58rem; background: linear-gradient(135deg, var(--brand-500), var(--cyan));
+    color: white; padding: 0.1rem 0.35rem; border-radius: 6px; font-weight: 700;
+    font-family: var(--font-mono); vertical-align: middle; margin-left: 3px; flex-shrink: 0;
+}
 
-    .pipeline-arrow {
-        color: var(--slate-300);
-        font-size: 0.75rem;
-    }
+/* Recent jobs */
+.recent-job {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--slate-50);
+    gap: 0.5rem;
+}
+.recent-job:last-child { border-bottom: none; }
+.rj-name {
+    font-weight: 600; font-size: 0.8rem;
+    color: var(--brand-800); font-family: var(--font-mono);
+    white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; max-width: 180px;
+}
+.rj-meta { font-size: 0.7rem; color: var(--slate-400); margin-top: 1px; }
 
-    /* UPLOAD LAYOUT */
-    .upload-layout {
-        display: grid;
-        grid-template-columns: 1fr 320px;
-        gap: 1.5rem;
-        align-items: start;
-    }
+/* Excel template row */
+.file-field-styled {
+    width: 100%;
+    padding: 0.45rem 0.65rem;
+    border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius);
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    color: var(--slate-600);
+    background: var(--slate-50);
+    cursor: pointer;
+}
 
-    /* DROP ZONE */
-    .drop-zone {
-        border: 2px dashed var(--slate-200);
-        border-radius: var(--radius-xl);
-        padding: 3.5rem 2rem;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.2s;
-        background: var(--white);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .drop-zone::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(ellipse at 50% 0%, rgba(37,99,235,0.04) 0%, transparent 60%);
-        pointer-events: none;
-    }
-
-    .drop-zone:hover, .drop-zone.dragover {
-        border-color: var(--brand-400);
-        background: var(--brand-50);
-        box-shadow: var(--shadow-md);
-    }
-
-    .drop-zone.dragover { border-style: solid; }
-
-    .drop-icon {
-        width: 64px;
-        height: 64px;
-        background: linear-gradient(135deg, var(--brand-100), var(--cyan-light));
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-        margin: 0 auto 1.25rem;
-        box-shadow: 0 4px 12px rgba(37,99,235,0.12);
-    }
-
-    .drop-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: var(--brand-800);
-        margin-bottom: 0.4rem;
-    }
-
-    .drop-hint {
-        font-size: 0.85rem;
-        color: var(--slate-400);
-        margin-bottom: 1.5rem;
-    }
-
-    .drop-formats {
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-    }
-
-    .format-chip {
-        padding: 0.25rem 0.65rem;
-        border: 1px solid var(--slate-200);
-        border-radius: 6px;
-        font-size: 0.72rem;
-        font-family: var(--font-mono);
-        color: var(--slate-500);
-        background: var(--slate-50);
-        font-weight: 500;
-    }
-
-    #fileInput { display: none; }
-
-    .file-selected {
-        display: none;
-        align-items: center;
-        gap: 10px;
-        padding: 0.75rem 1rem;
-        background: var(--brand-50);
-        border: 1px solid var(--brand-100);
-        border-radius: var(--radius);
-        margin-top: 1.25rem;
-        text-align: left;
-    }
-
-    .file-selected.show { display: flex; }
-
-    .file-icon {
-        width: 36px;
-        height: 36px;
-        background: var(--brand-500);
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1rem;
-        flex-shrink: 0;
-    }
-
-    .file-name {
-        font-weight: 600;
-        font-size: 0.875rem;
-        color: var(--brand-800);
-        font-family: var(--font-mono);
-        word-break: break-all;
-    }
-
-    .file-size {
-        font-size: 0.75rem;
-        color: var(--slate-400);
-        margin-top: 1px;
-    }
-
-    /* SIDEBAR */
-    .sidebar { display: flex; flex-direction: column; gap: 1rem; }
-
-    .option-card {
-        background: var(--white);
-        border: 1px solid var(--slate-200);
-        border-radius: var(--radius-lg);
-        padding: 1.1rem 1.25rem;
-        box-shadow: var(--shadow-xs);
-    }
-
-    .option-label {
-        font-size: 0.8rem;
-        font-weight: 700;
-        color: var(--slate-700);
-        margin-bottom: 0.6rem;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .option-desc {
-        font-size: 0.78rem;
-        color: var(--slate-400);
-        margin-top: 0.35rem;
-        line-height: 1.5;
-    }
-
-    /* FEATURES GRID */
-    .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 0.875rem;
-        margin-top: 2.5rem;
-    }
-
-    .feature-card {
-        background: var(--white);
-        border: 1px solid var(--slate-100);
-        border-radius: var(--radius-lg);
-        padding: 1.1rem;
-        box-shadow: var(--shadow-xs);
-        transition: all 0.2s;
-    }
-
-    .feature-card:hover {
-        box-shadow: var(--shadow-md);
-        border-color: var(--brand-200, #bfdbfe);
-        transform: translateY(-2px);
-    }
-
-    .feature-icon {
-        font-size: 1.5rem;
-        margin-bottom: 0.6rem;
-    }
-
-    .feature-title {
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: var(--brand-800);
-        margin-bottom: 0.25rem;
-    }
-
-    .feature-desc {
-        font-size: 0.78rem;
-        color: var(--slate-500);
-        line-height: 1.5;
-    }
-
-    /* NEW badge */
-    .new-badge {
-        font-size: 0.6rem;
-        background: linear-gradient(135deg, var(--brand-500), var(--cyan));
-        color: white;
-        padding: 0.1rem 0.4rem;
-        border-radius: 8px;
-        font-weight: 700;
-        font-family: var(--font-mono);
-        vertical-align: middle;
-        margin-left: 4px;
-    }
-
-    /* RECENT JOBS */
-    .recent-job {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.75rem 0;
-        border-bottom: 1px solid var(--slate-50);
-        gap: 0.75rem;
-    }
-
-    .recent-job:last-child { border-bottom: none; }
-
-    .recent-job-name {
-        font-weight: 600;
-        font-size: 0.85rem;
-        color: var(--brand-800);
-        font-family: var(--font-mono);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 200px;
-    }
-
-    .recent-job-meta {
-        font-size: 0.75rem;
-        color: var(--slate-400);
-        margin-top: 2px;
-    }
-
-    /* SUBMIT BTN */
-    #submitBtn {
-        width: 100%;
-        justify-content: center;
-        padding: 0.875rem;
-        font-size: 0.95rem;
-        border-radius: var(--radius-lg);
-    }
-
-    @media (max-width: 900px) {
-        .upload-layout { grid-template-columns: 1fr; }
-        .pipeline { gap: 0.25rem; }
-        .pipeline-step { padding: 0.3rem 0.6rem; font-size: 0.7rem; }
-    }
+@media (max-width: 900px) {
+    .upload-layout { grid-template-columns: 1fr; }
+    .field-row { grid-template-columns: 1fr; }
+    .pipeline-step { font-size: 0.7rem; padding: 0.3rem 0.55rem; }
+}
 </style>
 {% endblock %}
 
@@ -354,11 +376,7 @@
 <section class="hero">
     <div class="hero-eyebrow">🚀 QA Automation Toolkit</div>
     <h1>Convertissez vos recettes<br><span class="gradient-text">en scripts automatisés</span></h1>
-    <p class="hero-desc">
-        Uploadez votre fichier Word, obtenez un Excel structuré, des scripts Gherkin prêts à l'emploi et un projet Cypress complet — en quelques secondes.
-    </p>
-
-    <!-- PIPELINE -->
+    <p class="hero-desc">Uploadez votre fichier Word, personnalisez l'en-tête, obtenez un Excel structuré, des scripts Gherkin et un projet Cypress prêt à l'emploi.</p>
     <div class="pipeline">
         <div class="pipeline-step active">📄 Word</div>
         <div class="pipeline-arrow">→</div>
@@ -368,201 +386,313 @@
         <div class="pipeline-arrow">→</div>
         <div class="pipeline-step active">🌲 Cypress</div>
         <div class="pipeline-arrow">→</div>
-        <div class="pipeline-step muted">🖥️ VS Code</div>
+        <div class="pipeline-step active">🖥️ VS Code</div>
     </div>
 </section>
 
-<!-- UPLOAD SECTION -->
+<!-- FORM -->
 <form method="post" enctype="multipart/form-data" id="uploadForm">
     {% csrf_token %}
     <div class="upload-layout">
 
-        <!-- DROP ZONE -->
-        <div>
-            <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-                <div class="drop-icon">📋</div>
-                <div class="drop-title">Déposer votre fichier Word ici</div>
-                <div class="drop-hint">ou cliquer pour parcourir</div>
-                <div class="drop-formats">
-                    <span class="format-chip">.docx</span>
-                    <span class="format-chip">.doc</span>
-                    <span class="format-chip">max 50 MB</span>
+        <!-- MAIN FORM CARD -->
+        <div class="form-card">
+
+            <!-- STEP 1 : Fichier Word -->
+            <div class="form-card-section">
+                <div class="section-label">
+                    <span class="step-num">1</span>
+                    Fichier Word source
                 </div>
-                <input type="file" id="fileInput" name="word_file" accept=".docx,.doc" required>
+                <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                    <div class="drop-icon" id="dropIcon">📋</div>
+                    <div class="drop-title" id="dropTitle">Déposer votre fichier Word ici</div>
+                    <div class="drop-hint">ou cliquer pour parcourir</div>
+                    <div class="drop-formats">
+                        <span class="format-chip">.docx</span>
+                        <span class="format-chip">.doc</span>
+                        <span class="format-chip">≤ 50 MB</span>
+                    </div>
+                    <input type="file" id="fileInput" name="word_file" accept=".docx,.doc" required>
+                </div>
+                <div class="file-chosen" id="fileChosen">
+                    <div class="file-icon-box">📄</div>
+                    <div style="flex:1; min-width:0;">
+                        <div class="file-name" id="fileName">—</div>
+                        <div class="file-meta" id="fileMeta">—</div>
+                    </div>
+                    <button type="button" onclick="clearFile()" class="btn btn-ghost btn-sm" title="Retirer">✕</button>
+                </div>
+                {% if form.word_file.errors %}
+                <div class="alert alert-error mt-4">⚠️ {{ form.word_file.errors|join:", " }}</div>
+                {% endif %}
             </div>
 
-            <!-- File preview -->
-            <div class="file-selected" id="filePreview">
-                <div class="file-icon">📄</div>
-                <div>
-                    <div class="file-name" id="fileName">—</div>
-                    <div class="file-size" id="fileSize">—</div>
+            <!-- STEP 2 : En-tête entreprise -->
+            <div class="form-card-section">
+                <div class="section-label">
+                    <span class="step-num">2</span>
+                    En-tête du document Excel
                 </div>
-                <button type="button" onclick="clearFile()" class="btn btn-ghost btn-sm" style="margin-left:auto;">✕</button>
+
+                <!-- Logo upload + company name side by side -->
+                <div style="display:grid; grid-template-columns:120px 1fr; gap:0.875rem; margin-bottom:0.875rem; align-items:start;">
+
+                    <!-- Logo -->
+                    <div>
+                        <label style="display:block;font-size:0.78rem;font-weight:600;color:var(--slate-600);margin-bottom:0.35rem;">
+                            Logo <span style="color:var(--slate-300);font-weight:400;">(optionnel)</span>
+                        </label>
+                        <div class="logo-upload-zone" id="logoZone" onclick="document.getElementById('logoInput').click()" title="Cliquer pour uploader un logo">
+                            <input type="file" id="logoInput" name="company_logo" accept=".png,.jpg,.jpeg,.gif,.svg">
+                            <div class="logo-placeholder" id="logoPlaceholder">
+                                <div class="logo-placeholder-icon">🏢</div>
+                                <div class="logo-placeholder-text">Logo</div>
+                                <div class="logo-placeholder-sub">PNG · JPG · SVG</div>
+                            </div>
+                            <div class="logo-preview-row" id="logoPreviewRow">
+                                <img id="logoPreviewThumb" class="logo-preview-thumb" src="" alt="Logo preview">
+                                <div>
+                                    <div class="logo-preview-name" id="logoPreviewName">—</div>
+                                    <button type="button" onclick="clearLogo(event)" class="btn btn-ghost btn-sm" style="margin-top:4px; padding:0.2rem 0.4rem; font-size:0.68rem;">✕ Retirer</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="font-size:0.68rem;color:var(--slate-300);margin-top:4px;text-align:center;">Affiché en haut à droite de l'Excel</div>
+                    </div>
+
+                    <!-- Company name -->
+                    <div class="field-group">
+                        <label for="id_company_name">Nom de l'entreprise</label>
+                        <input type="text" id="id_company_name" name="company_name"
+                               class="text-input"
+                               placeholder="Ex : AT-TechGN, Accenture…"
+                               value="{{ form.company_name.value|default:'' }}"
+                               maxlength="200">
+                        <div class="field-hint">Affiché en titre de l'en-tête Excel</div>
+                    </div>
+                </div>
+
+                <!-- Excel filename -->
+                <div class="field-group">
+                    <label for="id_excel_filename">Nom du fichier Excel généré</label>
+                    <div style="display:flex; align-items:center; gap:0;">
+                        <input type="text" id="id_excel_filename" name="excel_filename"
+                               class="text-input"
+                               placeholder="recette_sprint3 (sans .xlsx)"
+                               value="{{ form.excel_filename.value|default:'' }}"
+                               style="border-radius: var(--radius) 0 0 var(--radius);"
+                               maxlength="255">
+                        <span style="padding:0.55rem 0.75rem; background:var(--slate-100); border:1.5px solid var(--slate-200); border-left:none; border-radius:0 var(--radius) var(--radius) 0; font-size:0.82rem; font-family:var(--font-mono); color:var(--slate-400); white-space:nowrap;">.xlsx</span>
+                    </div>
+                    <div class="field-hint">Laissez vide pour un nom automatique basé sur le fichier Word</div>
+                </div>
             </div>
 
-            {% if form.word_file.errors %}
-            <div class="alert alert-error mt-4">
-                ⚠️ {{ form.word_file.errors|join:", " }}
+            <!-- STEP 3 : Template Excel (optionnel) -->
+            <div class="form-card-section">
+                <div class="section-label">
+                    <span class="step-num">3</span>
+                    Template Excel <span style="font-weight:400;color:var(--slate-300);margin-left:4px;">(optionnel)</span>
+                </div>
+                <input type="file" name="excel_template" accept=".xlsx" class="file-field-styled">
+                <div style="font-size:0.72rem;color:var(--slate-400);margin-top:6px;">Template personnalisé pour la mise en forme de l'Excel.</div>
             </div>
-            {% endif %}
 
             <!-- SUBMIT -->
-            <button type="submit" id="submitBtn" class="btn btn-primary btn-lg mt-4" disabled>
-                <span id="submitIcon">⚡</span>
-                <span id="submitText">Convertir & Analyser</span>
-            </button>
+            <div class="submit-section">
+                <button type="submit" id="submitBtn" class="btn btn-primary btn-lg" disabled>
+                    <span id="submitIcon">⚡</span>
+                    <span id="submitText">Analyser & Convertir</span>
+                </button>
+                <div style="text-align:center;margin-top:0.75rem;font-size:0.75rem;color:var(--slate-400);">
+                    Les fichiers sont supprimés automatiquement après 1 heure.
+                </div>
+            </div>
         </div>
 
         <!-- SIDEBAR -->
         <div class="sidebar">
 
-            <!-- Template Excel -->
-            <div class="option-card">
-                <div class="option-label">📊 Template Excel <span class="badge badge-new">optionnel</span></div>
-                <input type="file" name="excel_template" accept=".xlsx"
-                    style="width:100%; font-size:0.8rem; padding:0.4rem; border:1px solid var(--slate-200); border-radius:var(--radius-sm); font-family:var(--font-mono); background: var(--slate-50);">
-                <div class="option-desc">Personnalisez la mise en forme de l'Excel généré.</div>
-            </div>
-
-            <!-- New features info -->
-            <div class="option-card" style="background: linear-gradient(135deg, #f0f9ff 0%, #f0fdf4 100%); border-color: var(--brand-100);">
-                <div class="option-label" style="color: var(--brand-600);">✨ Nouvelles fonctionnalités</div>
-                <div style="display:flex; flex-direction:column; gap:0.5rem; margin-top:0.25rem;">
-                    <div style="display:flex; align-items:center; gap:7px; font-size:0.8rem; color:var(--slate-600);">
-                        <span style="color:var(--green-500);">●</span>
-                        Scripts Gherkin / BDD
-                        <span class="new-badge">NEW</span>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:7px; font-size:0.8rem; color:var(--slate-600);">
-                        <span style="color:var(--green-500);">●</span>
-                        Projet Cypress complet
-                        <span class="new-badge">NEW</span>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:7px; font-size:0.8rem; color:var(--slate-600);">
-                        <span style="color:var(--green-500);">●</span>
-                        Ouvrir dans VS Code
-                        <span class="new-badge">NEW</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stats -->
-            {% if recent_jobs %}
-            <div class="option-card">
-                <div class="option-label">🕒 Conversions récentes</div>
-                {% for job in recent_jobs %}
-                <div class="recent-job">
-                    <div>
-                        <div class="recent-job-name" title="{{ job.source_filename }}">
-                            {{ job.source_filename|truncatechars:28 }}
+            <!-- Pipeline Features -->
+            <div class="sidebar-card">
+                <div class="sidebar-card-head">✨ Ce que vous obtenez</div>
+                <div class="sidebar-card-body">
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <span class="fi-icon">📊</span>
+                            <span>Excel professionnel avec en-tête personnalisée et logo</span>
                         </div>
-                        <div class="recent-job-meta">{{ job.use_cases_count }} UC • {{ job.created_at|date:"d/m H:i" }}</div>
+                        <div class="feature-item">
+                            <span class="fi-icon">📝</span>
+                            <span>Scripts Gherkin (.feature) par cas automatisable <span class="fi-new">NEW</span></span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="fi-icon">🌲</span>
+                            <span>Projet Cypress complet avec step definitions <span class="fi-new">NEW</span></span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="fi-icon">🖥️</span>
+                            <span>Ouverture automatique dans VS Code <span class="fi-new">NEW</span></span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="fi-icon">✏️</span>
+                            <span>Édition inline avant export — aucune perte de données</span>
+                        </div>
                     </div>
-                    <a href="{% url 'core:preview' job.id %}" class="btn btn-ghost btn-sm">Voir →</a>
                 </div>
-                {% endfor %}
+            </div>
+
+            <!-- Excel Header Preview (live) -->
+            <div class="sidebar-card" id="headerPreviewCard">
+                <div class="sidebar-card-head">👁️ Aperçu en-tête Excel</div>
+                <div class="sidebar-card-body" style="padding:0.75rem 1rem;">
+                    <div id="headerPreview" style="border:1px solid var(--slate-200); border-radius:var(--radius); overflow:hidden; font-family:var(--font-mono); font-size:0.78rem;">
+                        <!-- Row 1: company name + logo -->
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0.75rem;background:#0f2342;color:white;gap:8px;">
+                            <span id="previewCompany" style="font-weight:700;font-size:0.88rem;">QA Recipe Converter</span>
+                            <div id="previewLogoContainer" style="height:28px;width:auto;display:flex;align-items:center;">
+                                <div id="previewLogoPlaceholder" style="font-size:0.65rem;color:rgba(255,255,255,0.3);font-style:italic;">logo ici</div>
+                                <img id="previewLogoImg" src="" style="height:26px;width:auto;object-fit:contain;display:none;border-radius:3px;" alt="logo">
+                            </div>
+                        </div>
+                        <!-- Row 2: meta -->
+                        <div style="padding:0.3rem 0.75rem;background:#1a3a6e;color:#c7d8f0;font-size:0.7rem;">
+                            Source : <span id="previewSourceFile" style="opacity:0.7;">document.docx</span>
+                            &nbsp;│&nbsp;Export : <span id="previewExcelFile" style="opacity:0.7;">recette_document.xlsx</span>
+                        </div>
+                        <!-- Row 3: header row -->
+                        <div style="display:grid;grid-template-columns:30px 1fr 1fr 1fr;background:#1e3a5f;color:white;padding:0.35rem 0.5rem;font-size:0.65rem;font-weight:700;gap:4px;">
+                            <span>N°</span><span>Use Case</span><span>Description</span><span>…</span>
+                        </div>
+                        <div style="padding:0.35rem 0.5rem;font-size:0.68rem;color:var(--slate-400);text-align:center;background:var(--slate-50);">
+                            Données des cas de tests…
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Jobs -->
+            {% if recent_jobs %}
+            <div class="sidebar-card">
+                <div class="sidebar-card-head">🕒 Conversions récentes</div>
+                <div class="sidebar-card-body" style="padding:0.5rem 1rem;">
+                    {% for job in recent_jobs %}
+                    <div class="recent-job">
+                        <div style="min-width:0;">
+                            <div class="rj-name" title="{{ job.source_filename }}">{{ job.source_filename|truncatechars:24 }}</div>
+                            <div class="rj-meta">
+                                {{ job.use_cases_count }} UC
+                                {% if job.company_name %} · {{ job.company_name|truncatechars:16 }}{% endif %}
+                                · {{ job.created_at|date:"d/m H:i" }}
+                            </div>
+                        </div>
+                        <a href="{% url 'core:preview' job.id %}" class="btn btn-ghost btn-sm" style="flex-shrink:0;">Voir →</a>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
             {% endif %}
 
         </div>
     </div>
 </form>
-
-<!-- FEATURES GRID -->
-<div class="features-grid">
-    <div class="feature-card">
-        <div class="feature-icon">🔍</div>
-        <div class="feature-title">Détection intelligente</div>
-        <div class="feature-desc">Colonnes reconnues automatiquement, insensible à la casse et aux variantes.</div>
-    </div>
-    <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <div class="feature-title">Excel professionnel</div>
-        <div class="feature-desc">2 feuilles : Use Cases + Cas automatisés, mise en forme avancée.</div>
-    </div>
-    <div class="feature-card">
-        <div class="feature-icon">🌲</div>
-        <div class="feature-title">Scripts Gherkin <span class="new-badge">NEW</span></div>
-        <div class="feature-desc">Génération automatique de fichiers .feature BDD/Cucumber.</div>
-    </div>
-    <div class="feature-card">
-        <div class="feature-icon">🌲</div>
-        <div class="feature-title">Projet Cypress <span class="new-badge">NEW</span></div>
-        <div class="feature-desc">Projet Cypress complet avec step definitions prêtes à implémenter.</div>
-    </div>
-    <div class="feature-card">
-        <div class="feature-icon">🖥️</div>
-        <div class="feature-title">Ouvrir VS Code <span class="new-badge">NEW</span></div>
-        <div class="feature-desc">Ouvrez le projet Cypress directement dans votre éditeur favori.</div>
-    </div>
-    <div class="feature-card">
-        <div class="feature-icon">🔒</div>
-        <div class="feature-title">Sécurité</div>
-        <div class="feature-desc">Fichiers supprimés automatiquement après 1h. Aucune donnée conservée.</div>
-    </div>
-</div>
-
 {% endblock %}
 
 {% block extra_js %}
 <script>
-const dropZone = document.getElementById('dropZone');
-const fileInput = document.getElementById('fileInput');
-const filePreview = document.getElementById('filePreview');
-const submitBtn = document.getElementById('submitBtn');
+const dropZone   = document.getElementById('dropZone');
+const fileInput  = document.getElementById('fileInput');
+const fileChosen = document.getElementById('fileChosen');
+const submitBtn  = document.getElementById('submitBtn');
+const logoInput  = document.getElementById('logoInput');
+const logoZone   = document.getElementById('logoZone');
 
-function formatBytes(bytes) {
-    if (bytes < 1024) return bytes + ' o';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' Ko';
-    return (bytes / (1024 * 1024)).toFixed(1) + ' Mo';
+// ── File helpers ─────────────────────────────────────────────
+function formatBytes(b){
+    if(b<1024) return b+' o';
+    if(b<1048576) return (b/1024).toFixed(1)+' Ko';
+    return (b/1048576).toFixed(1)+' Mo';
 }
 
-function onFileSelected(file) {
-    if (!file) return;
+function onFileSelected(file){
+    if(!file) return;
     document.getElementById('fileName').textContent = file.name;
-    document.getElementById('fileSize').textContent = formatBytes(file.size);
-    filePreview.classList.add('show');
+    document.getElementById('fileMeta').textContent = formatBytes(file.size)+' · '+file.name.split('.').pop().toUpperCase();
+    fileChosen.classList.add('show');
+    dropZone.classList.add('has-file');
+    document.getElementById('dropIcon').textContent = '✅';
+    document.getElementById('dropTitle').textContent = 'Fichier sélectionné';
     submitBtn.disabled = false;
-    submitBtn.style.background = '';
-    dropZone.style.borderColor = 'var(--green-500)';
-    dropZone.style.background = 'var(--green-100, #f0fdf4)';
-}
-
-function clearFile() {
-    fileInput.value = '';
-    filePreview.classList.remove('show');
-    submitBtn.disabled = true;
-    dropZone.style.borderColor = '';
-    dropZone.style.background = '';
-}
-
-fileInput.addEventListener('change', e => {
-    if (e.target.files[0]) onFileSelected(e.target.files[0]);
-});
-
-// Drag & drop
-['dragenter', 'dragover'].forEach(e => dropZone.addEventListener(e, ev => {
-    ev.preventDefault();
-    dropZone.classList.add('dragover');
-}));
-['dragleave', 'drop'].forEach(e => dropZone.addEventListener(e, ev => {
-    ev.preventDefault();
-    dropZone.classList.remove('dragover');
-}));
-dropZone.addEventListener('drop', ev => {
-    const file = ev.dataTransfer.files[0];
-    if (file) {
-        const dt = new DataTransfer();
-        dt.items.add(file);
-        fileInput.files = dt.files;
-        onFileSelected(file);
+    // update preview
+    document.getElementById('previewSourceFile').textContent = file.name;
+    const base = file.name.replace(/\.[^.]+$/,'');
+    if(!document.getElementById('id_excel_filename').value){
+        document.getElementById('previewExcelFile').textContent = 'recette_'+base+'.xlsx';
     }
+}
+
+function clearFile(){
+    fileInput.value = '';
+    fileChosen.classList.remove('show');
+    dropZone.classList.remove('has-file');
+    document.getElementById('dropIcon').textContent = '📋';
+    document.getElementById('dropTitle').textContent = 'Déposer votre fichier Word ici';
+    submitBtn.disabled = true;
+}
+
+fileInput.addEventListener('change', e => { if(e.target.files[0]) onFileSelected(e.target.files[0]); });
+
+// Drag & Drop
+['dragenter','dragover'].forEach(ev => dropZone.addEventListener(ev, e => { e.preventDefault(); dropZone.classList.add('dragover'); }));
+['dragleave','drop'].forEach(ev => dropZone.addEventListener(ev, e => { e.preventDefault(); dropZone.classList.remove('dragover'); }));
+dropZone.addEventListener('drop', e => {
+    const f = e.dataTransfer.files[0];
+    if(f){ const dt=new DataTransfer(); dt.items.add(f); fileInput.files=dt.files; onFileSelected(f); }
 });
 
-// Loading state on submit
-document.getElementById('uploadForm').addEventListener('submit', function() {
-    if (!fileInput.files[0]) return;
+// ── Logo helpers ─────────────────────────────────────────────
+function onLogoSelected(file){
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        const src = e.target.result;
+        document.getElementById('logoPreviewThumb').src = src;
+        document.getElementById('logoPreviewName').textContent = file.name.length>16 ? file.name.substring(0,14)+'…' : file.name;
+        document.getElementById('logoPreviewRow').classList.add('show');
+        document.getElementById('logoPlaceholder').style.display = 'none';
+        logoZone.classList.add('has-logo');
+        // update preview
+        document.getElementById('previewLogoPlaceholder').style.display = 'none';
+        document.getElementById('previewLogoImg').src = src;
+        document.getElementById('previewLogoImg').style.display = '';
+    };
+    reader.readAsDataURL(file);
+}
+
+function clearLogo(ev){
+    if(ev) ev.stopPropagation();
+    logoInput.value = '';
+    document.getElementById('logoPreviewRow').classList.remove('show');
+    document.getElementById('logoPlaceholder').style.display = '';
+    logoZone.classList.remove('has-logo');
+    document.getElementById('previewLogoPlaceholder').style.display = '';
+    document.getElementById('previewLogoImg').style.display = 'none';
+}
+
+logoInput.addEventListener('change', e => { if(e.target.files[0]) onLogoSelected(e.target.files[0]); });
+
+// ── Live header preview ──────────────────────────────────────
+document.getElementById('id_company_name').addEventListener('input', function(){
+    document.getElementById('previewCompany').textContent = this.value || 'QA Recipe Converter';
+});
+document.getElementById('id_excel_filename').addEventListener('input', function(){
+    document.getElementById('previewExcelFile').textContent = (this.value||'recette_document') + '.xlsx';
+});
+
+// ── Submit loading ───────────────────────────────────────────
+document.getElementById('uploadForm').addEventListener('submit', function(){
+    if(!fileInput.files[0]) return;
     submitBtn.disabled = true;
     document.getElementById('submitIcon').textContent = '⏳';
     document.getElementById('submitText').textContent = 'Analyse en cours…';

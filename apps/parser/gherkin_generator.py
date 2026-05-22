@@ -145,7 +145,7 @@ def generate_cypress_step_definitions(uc) -> str:
     return "\n".join(lines)
 
 
-def generate_cypress_project_zip(use_cases) -> io.BytesIO:
+def generate_cypress_project_zip(use_cases, company_name: str = "") -> io.BytesIO:
     """
     Generate a full Cypress project as a ZIP archive.
     Returns a BytesIO buffer.
@@ -165,7 +165,7 @@ def generate_cypress_project_zip(use_cases) -> io.BytesIO:
         zf.writestr(".gitignore", "node_modules/\ncypress/screenshots/\ncypress/videos/\n")
 
         # ── README ─────────────────────────────────────────────────────────
-        zf.writestr("README.md", _cypress_readme(automated_ucs))
+        zf.writestr("README.md", _cypress_readme(automated_ucs, company_name=company_name))
 
         # ── cypress/support/commands.js ────────────────────────────────────
         zf.writestr("cypress/support/commands.js", _commands_js())
@@ -296,7 +296,7 @@ def _commands_js() -> str:
 """
 
 
-def _cypress_readme(automated_ucs) -> str:
+def _cypress_readme(automated_ucs, company_name: str = "") -> str:
     count = len(automated_ucs)
     uc_list = "\n".join(
         f"- {uc.use_case_id or f'UC{uc.order:03d}'} — {uc.description or ''}"
@@ -349,5 +349,5 @@ package.json
 4. Lancer `npm run cy:open` pour déboguer interactivement
 
 ---
-*Généré par QA Recipe Converter — AT-TechGN*
+*Généré par QA Recipe Converter — {company_name or "AT-TechGN"}*
 """

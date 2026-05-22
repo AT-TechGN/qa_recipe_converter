@@ -5,497 +5,657 @@
 
 {% block extra_css %}
 <style>
-    /* PAGE HEADER */
-    .page-header {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        margin-bottom: 1.5rem;
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
+/* ── PAGE LAYOUT ──────────────────────────────────────────── */
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.page-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--brand-800);
+    letter-spacing: -0.04em;
+}
+.page-meta {
+    font-size: 0.78rem;
+    color: var(--slate-400);
+    margin-top: 3px;
+    font-family: var(--font-mono);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.green-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green-500);
+    display: inline-block;
+    flex-shrink: 0;
+}
 
-    .page-title {
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: var(--brand-800);
-        letter-spacing: -0.04em;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
+/* ── HEADER PREVIEW CARD ──────────────────────────────────── */
+.header-banner {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.header-banner-row1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #0f2342 0%, #1a3a6e 100%);
+    gap: 1rem;
+}
+.header-banner-company {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: white;
+    font-family: var(--font-sans);
+    letter-spacing: -0.02em;
+}
+.header-banner-logo-area {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 80px;
+}
+.header-banner-logo-area img {
+    max-height: 40px;
+    max-width: 140px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+.header-banner-logo-placeholder {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.2);
+    font-style: italic;
+}
+.header-banner-row2 {
+    padding: 0.4rem 1.5rem;
+    background: #1a3a6e;
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    color: #93b4d8;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.header-edit-btn {
+    margin-left: auto;
+    flex-shrink: 0;
+}
 
-    .page-meta {
-        font-size: 0.8rem;
-        color: var(--slate-400);
-        margin-top: 0.25rem;
-        font-family: var(--font-mono);
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
+/* ── STATS ────────────────────────────────────────────────── */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+.stat-box {
+    background: var(--white);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: var(--shadow-xs);
+}
+.stat-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+}
+.si-blue   { background: var(--brand-100); }
+.si-green  { background: var(--green-100); }
+.si-cyan   { background: var(--cyan-light,#ecfeff); }
+.si-violet { background: var(--violet-100); }
+.stat-val  { font-size: 1.35rem; font-weight: 800; color: var(--brand-800); font-family: var(--font-mono); line-height: 1; }
+.stat-lbl  { font-size: 0.72rem; color: var(--slate-400); font-weight: 500; margin-top: 2px; }
 
-    /* ACTION GROUPS */
-    .action-groups {
-        display: flex;
-        gap: 0.75rem;
-        align-items: center;
-        flex-wrap: wrap;
-    }
+/* ── EXPORT PANEL ─────────────────────────────────────────── */
+.export-panel {
+    background: linear-gradient(135deg, #0a1628 0%, #0f2342 100%);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+}
+.export-panel::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+    pointer-events: none;
+}
+.export-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.export-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+}
+.export-subtitle {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.35);
+    font-family: var(--font-mono);
+    margin-top: 2px;
+}
+.auto-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.25rem 0.75rem;
+    background: rgba(16,185,129,0.18);
+    border: 1px solid rgba(16,185,129,0.35);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #86efac;
+    font-family: var(--font-mono);
+}
 
-    .action-group {
-        display: flex;
-        gap: 0.4rem;
-        align-items: center;
-        padding: 0.3rem 0.4rem;
-        background: var(--slate-50);
-        border: 1px solid var(--slate-200);
-        border-radius: var(--radius);
-    }
+/* Export buttons grid */
+.export-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.625rem;
+}
+.exp-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 0.875rem 0.625rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.18s;
+    text-decoration: none;
+    color: white;
+    text-align: center;
+    position: relative;
+}
+.exp-btn:hover {
+    background: rgba(255,255,255,0.13);
+    border-color: rgba(255,255,255,0.22);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+}
+.exp-btn:active { transform: translateY(0); }
+.exp-btn .eb-icon { font-size: 1.5rem; line-height: 1; }
+.exp-btn .eb-label { font-size: 0.78rem; font-weight: 700; line-height: 1.2; }
+.exp-btn .eb-sub   { font-size: 0.64rem; color: rgba(255,255,255,0.38); font-family: var(--font-mono); }
+.exp-btn.eb-excel  { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.25); }
+.exp-btn.eb-excel:hover { background: rgba(16,185,129,0.22); border-color: rgba(16,185,129,0.45); }
+.exp-btn.eb-gherkin { background: rgba(6,182,212,0.1); border-color: rgba(6,182,212,0.22); }
+.exp-btn.eb-gherkin:hover { background: rgba(6,182,212,0.2); border-color: rgba(6,182,212,0.4); }
+.exp-btn.eb-cypress { background: rgba(99,102,241,0.12); border-color: rgba(99,102,241,0.25); }
+.exp-btn.eb-cypress:hover { background: rgba(99,102,241,0.22); border-color: rgba(99,102,241,0.45); }
+.exp-btn.eb-vscode  { background: rgba(124,58,237,0.12); border-color: rgba(124,58,237,0.25); }
+.exp-btn.eb-vscode:hover  { background: rgba(124,58,237,0.22); border-color: rgba(124,58,237,0.45); }
+.exp-btn.eb-disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.exp-btn .eb-count {
+    position: absolute;
+    top: 6px; right: 6px;
+    background: var(--green-500);
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 0.1rem 0.35rem;
+    border-radius: 10px;
+    font-family: var(--font-mono);
+}
+.no-auto-warning {
+    margin-top: 0.75rem;
+    padding: 0.5rem 0.875rem;
+    background: rgba(245,158,11,0.12);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: var(--radius);
+    font-size: 0.78rem;
+    color: #fcd34d;
+    display: none;
+}
+.no-auto-warning.show { display: block; }
 
-    .action-separator {
-        width: 1px;
-        height: 20px;
-        background: var(--slate-200);
-    }
+/* ── TABLE AREA ───────────────────────────────────────────── */
+.table-card {
+    background: white;
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+.table-toolbar {
+    padding: 0.875rem 1.25rem;
+    border-bottom: 1px solid var(--slate-100);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    background: var(--slate-50);
+}
+.toolbar-left  { display: flex; align-items: center; gap: 0.875rem; }
+.toolbar-right { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.toolbar-title { font-size: 0.9rem; font-weight: 700; color: var(--brand-800); display: flex; align-items: center; gap: 7px; }
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.28rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid var(--slate-200);
+    background: white;
+    transition: all 0.15s;
+    user-select: none;
+    white-space: nowrap;
+}
+.filter-chip:hover { border-color: var(--brand-300); color: var(--brand-600); }
+.filter-chip.active { background: var(--brand-50); border-color: var(--brand-400); color: var(--brand-600); }
+.save-indicator {
+    display: none;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    color: var(--green-600);
+    font-weight: 600;
+}
+.save-indicator.show { display: flex; }
 
-    /* EXPORT PANEL */
-    .export-panel {
-        background: linear-gradient(135deg, var(--brand-800) 0%, var(--slate-950) 100%);
-        border-radius: var(--radius-xl);
-        padding: 1.5rem;
-        color: white;
-        margin-bottom: 1.5rem;
-        position: relative;
-        overflow: hidden;
-        box-shadow: var(--shadow-xl);
-    }
+/* ── TABLE ────────────────────────────────────────────────── */
+.table-wrapper { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
 
-    .export-panel::before {
-        content: '';
-        position: absolute;
-        top: -40px;
-        right: -40px;
-        width: 160px;
-        height: 160px;
-        background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 70%);
-        pointer-events: none;
-    }
+thead tr { background: linear-gradient(135deg, #1e3a5f, #0f2342); }
+thead th {
+    color: white;
+    padding: 0.75rem 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.76rem;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+    border-right: 1px solid rgba(255,255,255,0.06);
+}
+thead th:last-child { border-right: none; }
+thead th:first-child { width: 44px; text-align: center; }
+thead th:last-child  { width: 58px; text-align: center; }
 
-    .export-title {
-        font-size: 0.9rem;
-        font-weight: 700;
-        color: rgba(255,255,255,0.9);
-        margin-bottom: 0.25rem;
-    }
+tbody tr {
+    border-bottom: 1px solid var(--slate-100);
+    transition: background 0.1s;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:nth-child(even) { background: var(--slate-50); }
+tbody tr:hover { background: #eff6ff !important; }
+tbody tr.row-automated { background: #f0fdf4 !important; }
+tbody tr.row-automated:hover { background: #dcfce7 !important; }
 
-    .export-subtitle {
-        font-size: 0.78rem;
-        color: rgba(255,255,255,0.45);
-        margin-bottom: 1.25rem;
-        font-family: var(--font-mono);
-    }
+td {
+    padding: 0.65rem 0.75rem;
+    vertical-align: top;
+    color: var(--slate-700);
+    line-height: 1.5;
+    max-width: 200px;
+    border-right: 1px solid var(--slate-50);
+}
+td:last-child { border-right: none; }
+td.td-num { text-align: center; font-weight: 700; font-family: var(--font-mono); color: var(--slate-300); font-size: 0.72rem; }
+td.td-ucid { font-weight: 700; font-family: var(--font-mono); color: var(--brand-500); font-size: 0.82rem; }
+.cell-editable {
+    min-height: 1.2em;
+    white-space: pre-wrap;
+    word-break: break-word;
+    display: block;
+    border-radius: 4px;
+    padding: 2px 4px;
+    outline: none;
+    transition: background 0.15s, box-shadow 0.15s;
+}
+.cell-editable:focus {
+    background: #fffbeb;
+    box-shadow: 0 0 0 2px var(--amber-500);
+}
+.status-select {
+    font-size: 0.75rem;
+    border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius-sm);
+    padding: 0.22rem 0.45rem;
+    background: white;
+    color: var(--slate-700);
+    cursor: pointer;
+    transition: border-color 0.15s;
+    width: 100%;
+}
+.status-select:focus { border-color: var(--brand-400); outline: none; }
 
-    .export-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 0.75rem;
-    }
+/* Toggle switch */
+.toggle {
+    position: relative;
+    width: 34px; height: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+.toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle-track {
+    position: absolute;
+    inset: 0;
+    background: var(--slate-200);
+    border-radius: 999px;
+    transition: background 0.2s;
+}
+.toggle-track::after {
+    content: '';
+    position: absolute;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: white;
+    top: 3px; left: 3px;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+}
+.toggle input:checked + .toggle-track { background: var(--green-500); }
+.toggle input:checked + .toggle-track::after { transform: translateX(16px); }
 
-    .export-btn {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 6px;
-        padding: 0.875rem 0.75rem;
-        background: rgba(255,255,255,0.07);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: var(--radius-lg);
-        cursor: pointer;
-        transition: all 0.2s;
-        text-decoration: none;
-        color: white;
-        text-align: center;
-    }
+/* ── HEADER EDIT MODAL ────────────────────────────────────── */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(2,6,23,0.6);
+    z-index: 9000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: 1.75rem;
+    max-width: 520px;
+    width: 92%;
+    box-shadow: var(--shadow-xl);
+    animation: modalIn 0.2s ease;
+}
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(-8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal-title { font-size: 1.05rem; font-weight: 800; color: var(--brand-800); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; }
+.modal-field { margin-bottom: 1rem; }
+.modal-field label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--slate-600); margin-bottom: 0.35rem; }
+.modal-input {
+    width: 100%; padding: 0.55rem 0.75rem;
+    border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.modal-input:focus { border-color: var(--brand-400); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+.modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.25rem; }
 
-    .export-btn:hover {
-        background: rgba(255,255,255,0.14);
-        border-color: rgba(255,255,255,0.25);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
+/* Logo upload in modal */
+.logo-drop {
+    border: 2px dashed var(--slate-200);
+    border-radius: var(--radius);
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--slate-50);
+}
+.logo-drop:hover { border-color: var(--brand-400); background: var(--brand-50); }
+.logo-drop.has-logo { border-color: var(--cyan); border-style: solid; background: #f0fdfe; }
+.logo-preview-inline {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+.logo-preview-inline.show { display: flex; }
+.logo-preview-inline img { max-height: 50px; max-width: 180px; object-fit: contain; border-radius: 4px; border: 1px solid var(--slate-200); }
 
-    .export-btn .e-icon {
-        font-size: 1.4rem;
-        line-height: 1;
-    }
+/* ── VS CODE MODAL ────────────────────────────────────────── */
+.vscode-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(2,6,23,0.65);
+    z-index: 9500;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+.vscode-modal.show { display: flex; }
+.vscode-box {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: 1.75rem;
+    max-width: 500px;
+    width: 92%;
+    box-shadow: var(--shadow-xl);
+    animation: modalIn 0.2s ease;
+}
+.vscode-status {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+.vscode-status.loading { background: var(--brand-50); color: var(--brand-700); border: 1px solid var(--brand-100); }
+.vscode-status.success { background: var(--green-100); color: #065f46; border: 1px solid #a7f3d0; }
+.vscode-status.warn    { background: var(--amber-100); color: #92400e; border: 1px solid #fcd34d; }
+.path-box {
+    background: var(--slate-900);
+    color: #94a3b8;
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    word-break: break-all;
+    margin-bottom: 1rem;
+    display: none;
+}
+.path-box.show { display: block; }
+.install-steps {
+    background: var(--slate-900);
+    color: #86efac;
+    border-radius: var(--radius);
+    padding: 0.875rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+.install-steps .comment { color: #64748b; }
+.install-steps .cmd     { color: #7dd3fc; }
 
-    .export-btn .e-label {
-        font-size: 0.8rem;
-        font-weight: 600;
-        line-height: 1.2;
-    }
-
-    .export-btn .e-sub {
-        font-size: 0.68rem;
-        color: rgba(255,255,255,0.45);
-        font-family: var(--font-mono);
-    }
-
-    .export-btn.excel-btn {
-        background: rgba(16,185,129,0.15);
-        border-color: rgba(16,185,129,0.3);
-    }
-    .export-btn.excel-btn:hover {
-        background: rgba(16,185,129,0.25);
-        border-color: rgba(16,185,129,0.5);
-    }
-
-    .export-btn.vscode-btn {
-        background: rgba(124,58,237,0.15);
-        border-color: rgba(124,58,237,0.3);
-    }
-    .export-btn.vscode-btn:hover {
-        background: rgba(124,58,237,0.25);
-        border-color: rgba(124,58,237,0.5);
-    }
-
-    /* AUTO COUNT BADGE */
-    .auto-count-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        padding: 0.2rem 0.65rem;
-        background: rgba(16,185,129,0.2);
-        border: 1px solid rgba(16,185,129,0.4);
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: #86efac;
-        font-family: var(--font-mono);
-    }
-
-    /* TABLE */
-    .table-wrapper {
-        overflow-x: auto;
-        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.83rem;
-        background: white;
-    }
-
-    thead tr {
-        background: var(--brand-800);
-    }
-
-    thead th {
-        color: white;
-        padding: 0.875rem 0.875rem;
-        text-align: left;
-        font-weight: 600;
-        font-size: 0.78rem;
-        white-space: nowrap;
-        letter-spacing: 0.03em;
-        border-right: 1px solid rgba(255,255,255,0.07);
-    }
-
-    thead th:last-child { border-right: none; }
-    thead th:first-child { width: 46px; text-align: center; }
-
-    tbody tr {
-        border-bottom: 1px solid var(--slate-100);
-        transition: background 0.12s;
-    }
-
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:nth-child(even) { background: var(--slate-50); }
-    tbody tr:hover { background: #eff6ff !important; }
-    tbody tr.is-automated { background: #f0fdf4 !important; }
-    tbody tr.is-automated:hover { background: #dcfce7 !important; }
-
-    td {
-        padding: 0.75rem 0.875rem;
-        vertical-align: top;
-        color: var(--slate-700);
-        line-height: 1.5;
-        max-width: 220px;
-        border-right: 1px solid var(--slate-50);
-    }
-
-    td:last-child { border-right: none; }
-    td:first-child { text-align: center; font-weight: 700; font-family: var(--font-mono); color: var(--slate-400); font-size: 0.75rem; }
-
-    .uc-id-cell {
-        font-weight: 700;
-        font-family: var(--font-mono);
-        color: var(--brand-600);
-        font-size: 0.85rem;
-    }
-
-    .cell-text {
-        color: var(--slate-600);
-        font-size: 0.82rem;
-        white-space: pre-wrap;
-        word-break: break-word;
-        min-height: 1em;
-    }
-
-    [contenteditable="true"] {
-        outline: none;
-        border-radius: 4px;
-        padding: 2px 4px;
-        min-height: 1.2em;
-        display: block;
-    }
-    [contenteditable="true"]:focus {
-        background: #fffbeb;
-        box-shadow: 0 0 0 2px var(--amber-500);
-    }
-
-    /* STATUS SELECT */
-    .status-select {
-        font-size: 0.78rem;
-        border: 1.5px solid var(--slate-200);
-        border-radius: var(--radius-sm);
-        padding: 0.25rem 0.5rem;
-        font-family: var(--font-sans);
-        background: var(--white);
-        color: var(--slate-700);
-        cursor: pointer;
-        transition: border-color 0.15s;
-        min-width: 100px;
-    }
-    .status-select:focus { border-color: var(--brand-400); outline: none; }
-
-    /* AUTO TOGGLE */
-    .toggle-auto {
-        position: relative;
-        width: 36px;
-        height: 20px;
-        cursor: pointer;
-    }
-    .toggle-auto input { opacity: 0; width: 0; height: 0; }
-    .toggle-track {
-        position: absolute;
-        inset: 0;
-        background: var(--slate-200);
-        border-radius: 999px;
-        transition: background 0.2s;
-    }
-    .toggle-track::after {
-        content: '';
-        position: absolute;
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: white;
-        top: 3px;
-        left: 3px;
-        transition: transform 0.2s;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    }
-    .toggle-auto input:checked + .toggle-track { background: var(--green-500); }
-    .toggle-auto input:checked + .toggle-track::after { transform: translateX(16px); }
-
-    /* AUTO BADGE */
-    .auto-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--green-500);
-        display: inline-block;
-        flex-shrink: 0;
-    }
-
-    /* SAVE INDICATOR */
-    .save-indicator {
-        display: none;
-        align-items: center;
-        gap: 6px;
-        font-size: 0.8rem;
-        color: var(--green-500);
-        font-weight: 600;
-    }
-
-    /* TOOLBAR */
-    .table-toolbar {
-        padding: 0.875rem 1.25rem;
-        border-bottom: 1px solid var(--slate-100);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-
-    .toolbar-left { display: flex; align-items: center; gap: 0.875rem; }
-    .toolbar-right { display: flex; align-items: center; gap: 0.75rem; }
-
-    .filter-chip {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 0.3rem 0.7rem;
-        border-radius: 20px;
-        font-size: 0.78rem;
-        font-weight: 500;
-        cursor: pointer;
-        border: 1.5px solid var(--slate-200);
-        background: white;
-        transition: all 0.15s;
-        user-select: none;
-    }
-    .filter-chip:hover { border-color: var(--brand-300); color: var(--brand-600); }
-    .filter-chip.active { background: var(--brand-50); border-color: var(--brand-400); color: var(--brand-600); }
-
-    /* VSCODE MODAL */
-    .modal-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.5);
-        z-index: 9999;
-        align-items: center;
-        justify-content: center;
-        backdrop-filter: blur(4px);
-    }
-    .modal-overlay.show { display: flex; }
-    .modal {
-        background: white;
-        border-radius: var(--radius-xl);
-        padding: 2rem;
-        max-width: 480px;
-        width: 90%;
-        box-shadow: var(--shadow-xl);
-        animation: modalIn 0.2s ease;
-    }
-    @keyframes modalIn {
-        from { opacity: 0; transform: scale(0.95) translateY(-10px); }
-        to   { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    .modal-title { font-size: 1.1rem; font-weight: 800; color: var(--brand-800); margin-bottom: 0.5rem; }
-    .modal-desc  { font-size: 0.875rem; color: var(--slate-500); margin-bottom: 1.25rem; line-height: 1.6; }
-
-    @media (max-width: 900px) {
-        .action-groups { gap: 0.5rem; }
-        .export-grid { grid-template-columns: repeat(2, 1fr); }
-    }
+@media (max-width: 900px) {
+    .export-grid { grid-template-columns: repeat(2,1fr); }
+    .stats-row   { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 600px) {
+    .export-grid { grid-template-columns: 1fr 1fr; }
+}
 </style>
 {% endblock %}
 
 {% block content %}
+
 <!-- PAGE HEADER -->
 <div class="page-header">
     <div>
-        <div class="page-title">👁️ Prévisualisation</div>
+        <div class="page-title">👁️ Prévisualisation & Export</div>
         <div class="page-meta">
-            <span class="auto-dot"></span>
-            <span class="font-mono">{{ job.source_filename }}</span>
-            <span>•</span>
+            <span class="green-dot"></span>
+            <span>{{ job.source_filename }}</span>
+            <span>·</span>
             <span>{{ job.created_at|date:"d/m/Y H:i" }}</span>
+            {% if job.company_name %}<span>·</span><span>{{ job.company_name }}</span>{% endif %}
         </div>
     </div>
-    <div class="action-groups">
-        <div class="action-group">
-            <div class="save-indicator" id="saveIndicator">✅ Sauvegardé</div>
-            <button class="btn btn-outline btn-sm" onclick="saveEdits()">💾 Sauvegarder</button>
-        </div>
-        <div class="action-separator"></div>
+    <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+        <div class="save-indicator" id="saveIndicator">✅ Sauvegardé</div>
+        <button class="btn btn-outline btn-sm" onclick="saveAll()">💾 Sauvegarder</button>
         <a href="{% url 'core:index' %}" class="btn btn-ghost btn-sm">← Retour</a>
     </div>
 </div>
 
+<!-- HEADER BANNER (en-tête Excel live) -->
+<div class="header-banner">
+    <div class="header-banner-row1">
+        <div>
+            <div class="header-banner-company" id="bannerCompany">
+                {{ job.company_name|default:"QA Recipe Converter" }}
+            </div>
+        </div>
+        <div class="header-banner-logo-area">
+            {% if job.company_logo %}
+                <img id="bannerLogo" src="{{ job.company_logo.url }}" alt="Logo {{ job.company_name }}">
+            {% else %}
+                <span class="header-banner-logo-placeholder" id="bannerLogoPlaceholder">logo ici</span>
+                <img id="bannerLogo" src="" alt="" style="display:none; max-height:40px; max-width:140px; object-fit:contain; border-radius:4px;">
+            {% endif %}
+        </div>
+    </div>
+    <div class="header-banner-row2">
+        <span>📄 Source : <strong>{{ job.source_filename }}</strong></span>
+        <span>·</span>
+        <span id="bannerExcelName">📊 Export : <strong>{{ job.effective_excel_filename }}</strong></span>
+        <button class="btn btn-ghost btn-sm header-edit-btn" onclick="openHeaderModal()"
+                style="color:rgba(255,255,255,0.5); border-color:rgba(255,255,255,0.1); font-size:0.72rem;">
+            ✏️ Modifier l'en-tête
+        </button>
+    </div>
+</div>
+
 <!-- STATS -->
-<div class="stats-grid mb-6">
+<div class="stats-row">
     <div class="stat-box">
-        <div class="stat-icon stat-icon-blue">📋</div>
-        <div>
-            <div class="stat-value">{{ job.use_cases_count }}</div>
-            <div class="stat-label">Use Cases total</div>
-        </div>
+        <div class="stat-icon si-blue">📋</div>
+        <div><div class="stat-val">{{ job.use_cases_count }}</div><div class="stat-lbl">Use Cases total</div></div>
     </div>
     <div class="stat-box">
-        <div class="stat-icon stat-icon-green">🤖</div>
-        <div>
-            <div class="stat-value" id="automatedCount">{{ automated_count }}</div>
-            <div class="stat-label">Cas automatisables</div>
-        </div>
+        <div class="stat-icon si-green">🤖</div>
+        <div><div class="stat-val" id="statAutoCount">{{ automated_count }}</div><div class="stat-lbl">Cas automatisables</div></div>
     </div>
     <div class="stat-box">
-        <div class="stat-icon stat-icon-cyan">📊</div>
-        <div>
-            <div class="stat-value">{{ job.use_cases_count }}</div>
-            <div class="stat-label">Lignes Excel</div>
-        </div>
+        <div class="stat-icon si-cyan">📝</div>
+        <div><div class="stat-val" id="statFeatureCount">{{ automated_count }}</div><div class="stat-lbl">Fichiers .feature</div></div>
     </div>
     <div class="stat-box">
-        <div class="stat-icon stat-icon-violet">🌲</div>
+        <div class="stat-icon si-violet">🌲</div>
         <div>
-            <div class="stat-value" id="featureCount">{{ automated_count }}</div>
-            <div class="stat-label">Fichiers .feature</div>
+            <div class="stat-val">{{ job.use_cases_count }}</div>
+            <div class="stat-lbl">Lignes Excel</div>
         </div>
     </div>
 </div>
 
 <!-- EXPORT PANEL -->
-<div class="export-panel mb-6">
-    <div class="flex items-center justify-between mb-4" style="flex-wrap:wrap; gap:0.5rem;">
+<div class="export-panel">
+    <div class="export-top">
         <div>
-            <div class="export-title">⬇️ Exporter</div>
-            <div class="export-subtitle">Choisissez votre format d'export</div>
+            <div class="export-title">⬇️ Exporter vos résultats</div>
+            <div class="export-subtitle">Sauvegardez d'abord vos modifications avant d'exporter</div>
         </div>
-        <div class="auto-count-badge">
+        <div class="auto-pill">
+            <span>🤖</span>
             <span id="exportAutoCount">{{ automated_count }}</span> cas automatisables
         </div>
     </div>
+
     <div class="export-grid">
         <!-- Excel -->
-        <a href="{% url 'core:generate' job.id %}" class="export-btn excel-btn">
-            <div class="e-icon">📊</div>
-            <div class="e-label">Excel complet</div>
-            <div class="e-sub">.xlsx • 2 feuilles</div>
+        <a href="{% url 'core:generate' job.id %}" class="exp-btn eb-excel" id="btnExcel"
+           onclick="saveBeforeExport(event, this.href)">
+            <div class="eb-icon">📊</div>
+            <div class="eb-label">Excel complet</div>
+            <div class="eb-sub">.xlsx · 2 feuilles</div>
         </a>
 
-        <!-- Gherkin features -->
-        <a href="{% url 'core:gherkin' job.id %}?mode=gherkin" class="export-btn" id="gherkinBtn">
-            <div class="e-icon">📝</div>
-            <div class="e-label">Scripts Gherkin</div>
-            <div class="e-sub">.feature • BDD</div>
+        <!-- Gherkin -->
+        <a href="{% url 'core:gherkin' job.id %}?mode=gherkin" class="exp-btn eb-gherkin" id="btnGherkin"
+           onclick="handleGherkinExport(event, 'gherkin')">
+            <div class="eb-icon">📝</div>
+            <div class="eb-label">Scripts Gherkin</div>
+            <div class="eb-sub">.feature · BDD/Cucumber</div>
+            <span class="eb-count" id="gherkinCount">{{ automated_count }}</span>
         </a>
 
-        <!-- Cypress project -->
-        <a href="{% url 'core:gherkin' job.id %}?mode=cypress" class="export-btn" id="cypressBtn">
-            <div class="e-icon">🌲</div>
-            <div class="e-label">Projet Cypress</div>
-            <div class="e-sub">.zip • complet</div>
+        <!-- Cypress -->
+        <a href="{% url 'core:gherkin' job.id %}?mode=cypress" class="exp-btn eb-cypress" id="btnCypress"
+           onclick="handleGherkinExport(event, 'cypress')">
+            <div class="eb-icon">🌲</div>
+            <div class="eb-label">Projet Cypress</div>
+            <div class="eb-sub">.zip · complet</div>
+            <span class="eb-count" id="cypressCount">{{ automated_count }}</span>
         </a>
 
         <!-- VS Code -->
-        <button type="button" class="export-btn vscode-btn" onclick="openVSCode()">
-            <div class="e-icon">🖥️</div>
-            <div class="e-label">Ouvrir VS Code</div>
-            <div class="e-sub">Cypress + editor</div>
+        <button type="button" class="exp-btn eb-vscode" id="btnVscode" onclick="openInVSCode()">
+            <div class="eb-icon">🖥️</div>
+            <div class="eb-label">Ouvrir VS Code</div>
+            <div class="eb-sub">Cypress + éditeur</div>
+            <span class="eb-count" id="vscodeCount">{{ automated_count }}</span>
         </button>
+    </div>
+
+    <div class="no-auto-warning" id="noAutoWarning">
+        ⚠️ Aucun cas marqué comme automatisable. Activez le toggle 🤖 sur les lignes souhaitées puis sauvegardez.
     </div>
 </div>
 
 <!-- TABLE CARD -->
-<div class="card">
+<div class="table-card">
     <div class="table-toolbar">
         <div class="toolbar-left">
-            <div class="card-title">📋 Use Cases extraits</div>
-            <span class="text-xs text-muted">Clic pour modifier</span>
+            <div class="toolbar-title">📋 Use Cases extraits</div>
+            <span style="font-size:0.72rem; color:var(--slate-400);">Cliquez sur une cellule pour modifier</span>
         </div>
         <div class="toolbar-right">
-            <label class="filter-chip" id="automatedFilter">
-                <input type="checkbox" id="showAutomatedOnly" style="display:none;">
-                🤖 Automatisés seulement
+            <label class="filter-chip" id="filterChip">
+                <input type="checkbox" id="filterAuto" style="display:none;">
+                🤖 Automatisés seuls
             </label>
-            <button class="btn btn-ghost btn-sm" onclick="toggleAllAutomated()">Tout cocher</button>
+            <button class="btn btn-ghost btn-sm" onclick="toggleAllAuto()" id="toggleAllBtn">☑ Tout cocher</button>
+            <button class="btn btn-primary btn-sm" onclick="saveAll()">💾 Sauvegarder</button>
         </div>
     </div>
 
@@ -511,21 +671,23 @@
                     <th>Résultats Attendus</th>
                     <th>Résultats Observés</th>
                     <th>Statut</th>
-                    <th>Auto.</th>
+                    <th>🤖</th>
                 </tr>
             </thead>
-            <tbody id="ucTableBody">
+            <tbody id="ucBody">
                 {% for uc in use_cases %}
                 <tr data-id="{{ uc.id }}"
-                    data-automated="{{ uc.is_automated|yesno:'true,false' }}"
-                    class="{% if uc.is_automated %}is-automated{% endif %}">
-                    <td>{{ uc.order }}</td>
-                    <td><div class="uc-id-cell" contenteditable="true" data-field="use_case_id">{{ uc.use_case_id }}</div></td>
-                    <td><div class="cell-text" contenteditable="true" data-field="description">{{ uc.description }}</div></td>
-                    <td><div class="cell-text" contenteditable="true" data-field="preconditions">{{ uc.preconditions }}</div></td>
-                    <td><div class="cell-text" contenteditable="true" data-field="steps">{{ uc.steps }}</div></td>
-                    <td><div class="cell-text" contenteditable="true" data-field="expected_results">{{ uc.expected_results }}</div></td>
-                    <td><div class="cell-text" contenteditable="true" data-field="observed_results">{{ uc.observed_results }}</div></td>
+                    data-auto="{{ uc.is_automated|yesno:'1,0' }}"
+                    class="{% if uc.is_automated %}row-automated{% endif %}">
+                    <td class="td-num">{{ uc.order }}</td>
+                    <td class="td-ucid">
+                        <span class="cell-editable" contenteditable="true" data-field="use_case_id">{{ uc.use_case_id }}</span>
+                    </td>
+                    <td><span class="cell-editable" contenteditable="true" data-field="description">{{ uc.description }}</span></td>
+                    <td><span class="cell-editable" contenteditable="true" data-field="preconditions">{{ uc.preconditions }}</span></td>
+                    <td><span class="cell-editable" contenteditable="true" data-field="steps">{{ uc.steps }}</span></td>
+                    <td><span class="cell-editable" contenteditable="true" data-field="expected_results">{{ uc.expected_results }}</span></td>
+                    <td><span class="cell-editable" contenteditable="true" data-field="observed_results">{{ uc.observed_results }}</span></td>
                     <td>
                         <select class="status-select" data-field="status">
                             <option value="À tester"  {% if uc.status == "À tester"  %}selected{% endif %}>🔵 À tester</option>
@@ -536,7 +698,7 @@
                         </select>
                     </td>
                     <td>
-                        <label class="toggle-auto">
+                        <label class="toggle">
                             <input type="checkbox" data-field="is_automated" {% if uc.is_automated %}checked{% endif %}>
                             <div class="toggle-track"></div>
                         </label>
@@ -548,32 +710,95 @@
     </div>
 </div>
 
-<!-- VS CODE MODAL -->
-<div class="modal-overlay" id="vscodeModal">
-    <div class="modal">
-        <div class="modal-title">🖥️ Ouvrir dans VS Code</div>
-        <div class="modal-desc" id="vscodeModalDesc">
-            Génération du projet Cypress et tentative d'ouverture de VS Code…
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- MODAL: Modifier l'en-tête                                   -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="headerModal">
+    <div class="modal-box">
+        <div class="modal-title">✏️ Modifier l'en-tête Excel</div>
+
+        <div class="modal-field">
+            <label>Nom de l'entreprise</label>
+            <input type="text" id="modalCompany" class="modal-input"
+                   placeholder="Ex : AT-TechGN, Accenture…"
+                   value="{{ job.company_name }}">
         </div>
-        <div class="code-block" id="vscodePathBlock" style="display:none; margin-bottom:1rem;"></div>
-        <div style="margin-top:1rem;">
-            <div class="option-label" style="font-size:0.8rem; color:var(--slate-600); margin-bottom:0.5rem;">Installation manuelle si VS Code n'est pas détecté :</div>
-            <div class="code-block" style="font-size:0.75rem;">
-# 1. Télécharger le projet Cypress (.zip) ci-dessus<br>
-# 2. Extraire le ZIP<br>
-# 3. Ouvrir dans VS Code :<br>
-code /chemin/vers/cypress_project/<br>
-<br>
-# 4. Installer les dépendances :<br>
-npm install<br>
-npm run cy:open
+
+        <div class="modal-field">
+            <label>Nom du fichier Excel généré</label>
+            <div style="display:flex; align-items:center; gap:0;">
+                <input type="text" id="modalExcelName" class="modal-input"
+                       placeholder="recette_sprint3"
+                       value="{{ job.excel_filename }}"
+                       style="border-radius:var(--radius) 0 0 var(--radius);">
+                <span style="padding:0.55rem 0.75rem; background:var(--slate-100); border:1.5px solid var(--slate-200); border-left:none; border-radius:0 var(--radius) var(--radius) 0; font-size:0.82rem; font-family:var(--font-mono); color:var(--slate-400);">.xlsx</span>
             </div>
         </div>
-        <div class="flex gap-3 mt-6" style="justify-content:flex-end;">
-            <a href="{% url 'core:gherkin' job.id %}?mode=cypress" class="btn btn-violet btn-sm">
-                📥 Télécharger le ZIP Cypress
+
+        <div class="modal-field">
+            <label>Logo entreprise <span style="color:var(--slate-300); font-weight:400;">(PNG, JPG, SVG · max 5 MB)</span></label>
+            <div class="logo-drop {% if job.company_logo %}has-logo{% endif %}"
+                 id="modalLogoDrop"
+                 onclick="document.getElementById('modalLogoInput').click()">
+                <input type="file" id="modalLogoInput" accept=".png,.jpg,.jpeg,.gif,.svg" style="display:none;">
+
+                <div class="logo-preview-inline {% if job.company_logo %}show{% endif %}" id="modalLogoPreview">
+                    {% if job.company_logo %}
+                    <img src="{{ job.company_logo.url }}" id="modalLogoImg" alt="Logo">
+                    {% else %}
+                    <img src="" id="modalLogoImg" alt="Logo" style="display:none;">
+                    {% endif %}
+                    <span style="font-size:0.75rem; color:#0e7490; font-weight:600;" id="modalLogoName">
+                        {% if job.company_logo %}Logo chargé{% endif %}
+                    </span>
+                    <button type="button" onclick="clearModalLogo(event)" class="btn btn-ghost btn-sm" style="font-size:0.72rem;">✕ Retirer</button>
+                </div>
+
+                <div id="modalLogoPlaceholder" {% if job.company_logo %}style="display:none;"{% endif %}
+                     style="padding:0.75rem; text-align:center;">
+                    <div style="font-size:1.5rem; margin-bottom:4px;">🏢</div>
+                    <div style="font-size:0.78rem; color:var(--slate-400); font-weight:500;">Cliquer pour uploader un logo</div>
+                    <div style="font-size:0.68rem; color:var(--slate-300); margin-top:2px;">Affiché en haut à droite de l'en-tête</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn btn-ghost btn-sm" onclick="closeHeaderModal()">Annuler</button>
+            <button class="btn btn-primary btn-sm" onclick="applyHeaderChanges()">✅ Appliquer</button>
+        </div>
+    </div>
+</div>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- MODAL: VS Code                                              -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<div class="vscode-modal" id="vscodeModal">
+    <div class="vscode-box">
+        <div class="modal-title">🖥️ Ouvrir dans VS Code</div>
+
+        <div class="vscode-status loading" id="vscodeStatus">
+            <span>⏳</span>
+            <span id="vscodeStatusText">Génération du projet Cypress en cours…</span>
+        </div>
+
+        <div class="path-box" id="vscodePath"></div>
+
+        <div class="install-steps" id="vscodeInstallSteps">
+            <div class="comment"># Si VS Code n'est pas détecté automatiquement :</div>
+            <div class="comment"># 1. Téléchargez le ZIP Cypress ci-dessous</div>
+            <div class="comment"># 2. Extrayez et ouvrez dans VS Code :</div>
+            <div class="cmd">code /chemin/vers/cypress_project/</div>
+            <div class="comment"># 3. Installez les dépendances :</div>
+            <div class="cmd">npm install</div>
+            <div class="cmd">npm run cy:open</div>
+        </div>
+
+        <div style="display:flex; gap:0.75rem; justify-content:flex-end; flex-wrap:wrap;">
+            <a href="{% url 'core:gherkin' job.id %}?mode=cypress" class="btn btn-violet btn-sm" id="vscodeZipBtn">
+                📥 Télécharger ZIP Cypress
             </a>
-            <button class="btn btn-outline btn-sm" onclick="closeVSCodeModal()">Fermer</button>
+            <button class="btn btn-outline btn-sm" onclick="closeVscodeModal()">Fermer</button>
         </div>
     </div>
 </div>
@@ -582,121 +807,278 @@ npm run cy:open
 
 {% block extra_js %}
 <script>
-const jobId = "{{ job.id }}";
+const JOB_ID = "{{ job.id }}";
+const CSRF   = getCookie('csrftoken');
 
-// ── Auto count ──────────────────────────────────────────────────────────────
-function updateAutomatedCount() {
-    const count = document.querySelectorAll('tr[data-automated="true"]').length;
-    document.getElementById('automatedCount').textContent = count;
-    document.getElementById('featureCount').textContent = count;
-    document.getElementById('exportAutoCount').textContent = count;
+// ═══════════════════════════════════════════════════════════════
+// AUTOMATED COUNT — central source of truth
+// ═══════════════════════════════════════════════════════════════
+function getAutoCount() {
+    return document.querySelectorAll('#ucBody tr[data-auto="1"]').length;
 }
 
-// ── Toggle checkbox ──────────────────────────────────────────────────────────
+function refreshAutoCounts() {
+    const n = getAutoCount();
+    ['statAutoCount','statFeatureCount','exportAutoCount','gherkinCount','cypressCount','vscodeCount'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = n;
+    });
+    // Show/hide warning
+    document.getElementById('noAutoWarning').classList.toggle('show', n === 0);
+    // Dim gherkin/cypress/vscode buttons if 0 automated
+    ['btnGherkin','btnCypress','btnVscode'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('eb-disabled', n === 0);
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TOGGLE HANDLERS
+// ═══════════════════════════════════════════════════════════════
 document.querySelectorAll('input[data-field="is_automated"]').forEach(cb => {
     cb.addEventListener('change', function() {
         const row = this.closest('tr');
         if (this.checked) {
-            row.dataset.automated = 'true';
-            row.classList.add('is-automated');
+            row.dataset.auto = '1';
+            row.classList.add('row-automated');
         } else {
-            row.dataset.automated = 'false';
-            row.classList.remove('is-automated');
+            row.dataset.auto = '0';
+            row.classList.remove('row-automated');
         }
-        updateAutomatedCount();
+        refreshAutoCounts();
     });
 });
 
-// ── Filter automated only ────────────────────────────────────────────────────
-const filterChip = document.getElementById('automatedFilter');
-document.getElementById('showAutomatedOnly').addEventListener('change', function() {
+// Filter chip
+const filterChip = document.getElementById('filterChip');
+document.getElementById('filterAuto').addEventListener('change', function() {
     filterChip.classList.toggle('active', this.checked);
-    document.querySelectorAll('#ucTableBody tr').forEach(row => {
-        row.style.display = (this.checked && row.dataset.automated !== 'true') ? 'none' : '';
+    document.querySelectorAll('#ucBody tr').forEach(r => {
+        r.style.display = (this.checked && r.dataset.auto !== '1') ? 'none' : '';
     });
 });
 filterChip.addEventListener('click', function() {
-    const cb = document.getElementById('showAutomatedOnly');
+    const cb = document.getElementById('filterAuto');
     cb.checked = !cb.checked;
     cb.dispatchEvent(new Event('change'));
 });
 
-// ── Toggle all automated ─────────────────────────────────────────────────────
-let allToggled = false;
-function toggleAllAutomated() {
-    allToggled = !allToggled;
+// Toggle all
+let allOn = false;
+function toggleAllAuto() {
+    allOn = !allOn;
+    document.getElementById('toggleAllBtn').textContent = allOn ? '☐ Tout décocher' : '☑ Tout cocher';
     document.querySelectorAll('input[data-field="is_automated"]').forEach(cb => {
-        cb.checked = allToggled;
+        cb.checked = allOn;
         cb.dispatchEvent(new Event('change'));
     });
 }
 
-// ── Save edits ───────────────────────────────────────────────────────────────
-async function saveEdits() {
-    const rows = document.querySelectorAll('#ucTableBody tr');
-    const payload = { use_cases: [] };
-    rows.forEach(row => {
-        const uc = { id: row.dataset.id };
+// ═══════════════════════════════════════════════════════════════
+// COLLECT DATA FROM TABLE
+// ═══════════════════════════════════════════════════════════════
+function collectTableData() {
+    const rows = document.querySelectorAll('#ucBody tr');
+    return Array.from(rows).map(row => {
+        const obj = { id: row.dataset.id };
         row.querySelectorAll('[data-field]').forEach(el => {
-            const field = el.dataset.field;
-            if (el.tagName === 'SELECT') uc[field] = el.value;
-            else if (el.tagName === 'INPUT' && el.type === 'checkbox') uc[field] = el.checked;
-            else uc[field] = el.textContent.trim();
+            const f = el.dataset.field;
+            if (el.tagName === 'SELECT')      obj[f] = el.value;
+            else if (el.type === 'checkbox')  obj[f] = el.checked;
+            else                              obj[f] = el.textContent.trim();
         });
-        payload.use_cases.push(uc);
+        return obj;
     });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SAVE ALL  (table + header fields)
+// ═══════════════════════════════════════════════════════════════
+async function saveAll() {
+    const payload = {
+        company_name:   document.getElementById('modalCompany')?.value  || '{{ job.company_name }}',
+        excel_filename: document.getElementById('modalExcelName')?.value || '{{ job.excel_filename }}',
+        use_cases:      collectTableData(),
+    };
 
     try {
-        const resp = await fetch(`/preview/${jobId}/`, {
+        const resp = await fetch(`/preview/${JOB_ID}/`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF },
             body: JSON.stringify(payload),
         });
         const data = await resp.json();
         if (data.success) {
             const ind = document.getElementById('saveIndicator');
-            ind.style.display = 'flex';
+            ind.classList.add('show');
             showToast('Modifications sauvegardées ✅', 'success');
-            setTimeout(() => { ind.style.display = 'none'; }, 3500);
+            setTimeout(() => ind.classList.remove('show'), 3500);
+            return true;
+        } else {
+            showToast('Erreur : ' + (data.error || 'inconnue'), 'error');
+            return false;
         }
     } catch (e) {
-        showToast('Erreur lors de la sauvegarde', 'error');
+        showToast('Erreur réseau lors de la sauvegarde', 'error');
+        return false;
     }
 }
 
-// ── VS Code ──────────────────────────────────────────────────────────────────
-async function openVSCode() {
-    // First save, then open
-    await saveEdits();
-    document.getElementById('vscodeModal').classList.add('show');
-    document.getElementById('vscodeModalDesc').textContent = 'Génération du projet Cypress et ouverture de VS Code…';
-    document.getElementById('vscodePathBlock').style.display = 'none';
+// ═══════════════════════════════════════════════════════════════
+// EXPORT WITH AUTO-SAVE
+// ═══════════════════════════════════════════════════════════════
+async function saveBeforeExport(evt, href) {
+    // For Excel just save silently then follow the link
+    evt.preventDefault();
+    showToast('Sauvegarde avant export…', 'info', 1500);
+    const ok = await saveAll();
+    if (ok !== false) window.location.href = href;
+}
 
+async function handleGherkinExport(evt, mode) {
+    evt.preventDefault();
+    const count = getAutoCount();
+    if (count === 0) {
+        showToast('⚠️ Aucun cas automatisable. Activez les toggles 🤖 d\'abord.', 'error', 5000);
+        return;
+    }
+    showToast(`Sauvegarde puis génération ${mode === 'cypress' ? 'Cypress' : 'Gherkin'}…`, 'info', 2000);
+    const ok = await saveAll();
+    if (ok !== false) {
+        const url = `/gherkin/${JOB_ID}/?mode=${mode}`;
+        window.location.href = url;
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VS CODE
+// ═══════════════════════════════════════════════════════════════
+async function openInVSCode() {
+    const count = getAutoCount();
+    if (count === 0) {
+        showToast('⚠️ Aucun cas automatisable. Activez les toggles 🤖 d\'abord.', 'error', 5000);
+        return;
+    }
+
+    // Open modal immediately in loading state
+    document.getElementById('vscodeStatus').className = 'vscode-status loading';
+    document.getElementById('vscodeStatusText').textContent = 'Sauvegarde et génération du projet Cypress…';
+    document.getElementById('vscodePath').classList.remove('show');
+    document.getElementById('vscodeModal').classList.add('show');
+
+    // Save first
+    await saveAll();
+
+    // Call VS Code endpoint
     try {
-        const resp = await fetch(`/vscode/${jobId}/`, {
+        const resp = await fetch(`/vscode/${JOB_ID}/`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF },
         });
         const data = await resp.json();
-        document.getElementById('vscodeModalDesc').textContent = data.message;
-        if (data.project_path) {
-            const pathBlock = document.getElementById('vscodePathBlock');
-            pathBlock.style.display = 'block';
-            pathBlock.textContent = '📁 ' + data.project_path;
+
+        if (data.vscode_opened) {
+            document.getElementById('vscodeStatus').className = 'vscode-status success';
+            document.getElementById('vscodeStatusText').textContent =
+                `✅ VS Code ouvert avec ${data.automated_count} fichier(s) .feature !`;
+        } else {
+            document.getElementById('vscodeStatus').className = 'vscode-status warn';
+            document.getElementById('vscodeStatusText').textContent =
+                '⚠️ Projet généré — VS Code non détecté (commande "code" introuvable dans le PATH).';
         }
-        showToast(data.vscode_opened ? 'VS Code ouvert ! 🖥️' : 'Projet généré — voir le chemin ci-dessous', data.vscode_opened ? 'success' : 'info');
+
+        if (data.project_path) {
+            const pb = document.getElementById('vscodePath');
+            pb.textContent = '📁 ' + data.project_path;
+            pb.classList.add('show');
+        }
+
+        showToast(data.vscode_opened ? '🖥️ VS Code ouvert !' : '📁 Projet généré — voir le chemin', data.vscode_opened ? 'success' : 'info');
+
     } catch (e) {
-        document.getElementById('vscodeModalDesc').textContent = 'Erreur : ' + e.message;
-        showToast('Erreur lors de l\'ouverture de VS Code', 'error');
+        document.getElementById('vscodeStatus').className = 'vscode-status warn';
+        document.getElementById('vscodeStatusText').textContent = '❌ Erreur : ' + e.message;
     }
 }
 
-function closeVSCodeModal() {
+function closeVscodeModal() {
     document.getElementById('vscodeModal').classList.remove('show');
 }
-
 document.getElementById('vscodeModal').addEventListener('click', function(e) {
-    if (e.target === this) closeVSCodeModal();
+    if (e.target === this) closeVscodeModal();
 });
+
+// ═══════════════════════════════════════════════════════════════
+// HEADER EDIT MODAL
+// ═══════════════════════════════════════════════════════════════
+function openHeaderModal() {
+    document.getElementById('headerModal').classList.add('show');
+}
+function closeHeaderModal() {
+    document.getElementById('headerModal').classList.remove('show');
+}
+document.getElementById('headerModal').addEventListener('click', function(e) {
+    if (e.target === this) closeHeaderModal();
+});
+
+// Live preview inside modal
+document.getElementById('modalCompany').addEventListener('input', function() {
+    document.getElementById('bannerCompany').textContent = this.value || 'QA Recipe Converter';
+});
+document.getElementById('modalExcelName').addEventListener('input', function() {
+    const name = (this.value || 'recette_document') + '.xlsx';
+    document.getElementById('bannerExcelName').innerHTML =
+        '📊 Export : <strong>' + name + '</strong>';
+});
+
+// Logo in modal
+document.getElementById('modalLogoInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        const src = e.target.result;
+        const img = document.getElementById('modalLogoImg');
+        img.src = src;
+        img.style.display = '';
+        document.getElementById('modalLogoPreview').classList.add('show');
+        document.getElementById('modalLogoPlaceholder').style.display = 'none';
+        document.getElementById('modalLogoDrop').classList.add('has-logo');
+        document.getElementById('modalLogoName').textContent = file.name.length > 20 ? file.name.substring(0,18)+'…' : file.name;
+        // Update banner live
+        const bannerLogo = document.getElementById('bannerLogo');
+        bannerLogo.src = src;
+        bannerLogo.style.display = '';
+        const ph = document.getElementById('bannerLogoPlaceholder');
+        if (ph) ph.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+});
+
+function clearModalLogo(ev) {
+    if (ev) ev.stopPropagation();
+    document.getElementById('modalLogoInput').value = '';
+    document.getElementById('modalLogoImg').src = '';
+    document.getElementById('modalLogoImg').style.display = 'none';
+    document.getElementById('modalLogoPreview').classList.remove('show');
+    document.getElementById('modalLogoPlaceholder').style.display = '';
+    document.getElementById('modalLogoDrop').classList.remove('has-logo');
+    document.getElementById('modalLogoName').textContent = '';
+    const bannerLogo = document.getElementById('bannerLogo');
+    bannerLogo.style.display = 'none';
+    const ph = document.getElementById('bannerLogoPlaceholder');
+    if (ph) ph.style.display = '';
+}
+
+async function applyHeaderChanges() {
+    closeHeaderModal();
+    await saveAll();
+    showToast('En-tête mis à jour ✅', 'success');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+refreshAutoCounts();
 </script>
 {% endblock %}

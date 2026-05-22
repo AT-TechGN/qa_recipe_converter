@@ -2,56 +2,218 @@
 
 {% block title %}Résultat — {{ job.source_filename }}{% endblock %}
 
+{% block extra_css %}
+<style>
+.result-wrapper { max-width: 680px; margin: 2.5rem auto; }
+.success-icon {
+    width: 68px; height: 68px;
+    background: linear-gradient(135deg, var(--green-500), var(--cyan));
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.9rem;
+    margin: 0 auto 1.25rem;
+    box-shadow: 0 8px 24px rgba(16,185,129,0.28);
+}
+.result-header { text-align: center; margin-bottom: 2rem; }
+.result-title {
+    font-size: 1.7rem; font-weight: 800;
+    color: var(--brand-800); letter-spacing: -0.04em;
+    margin-bottom: 0.4rem;
+}
+.result-sub { color: var(--slate-500); font-size: 0.9rem; }
+
+/* Header preview banner */
+.result-banner {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(0,0,0,0.08);
+}
+.result-banner-r1 {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.875rem 1.25rem;
+    background: linear-gradient(135deg, #0f2342 0%, #1a3a6e 100%);
+    gap: 1rem;
+}
+.result-banner-company { font-size: 1rem; font-weight: 800; color: white; }
+.result-banner-r2 {
+    padding: 0.35rem 1.25rem;
+    background: #1a3a6e;
+    font-size: 0.72rem; font-family: var(--font-mono);
+    color: #93b4d8;
+}
+
+/* Info grid */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+.info-box {
+    background: var(--white);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    box-shadow: var(--shadow-xs);
+}
+.info-box-label { font-size: 0.72rem; color: var(--slate-400); font-weight: 600; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.info-box-value { font-size: 0.9rem; font-weight: 700; color: var(--brand-800); font-family: var(--font-mono); word-break: break-all; }
+.info-box-value.big { font-size: 1.6rem; color: var(--brand-500); }
+.info-box-value.green { color: var(--green-500); }
+
+/* Export actions */
+.export-actions { display: flex; flex-direction: column; gap: 0.75rem; }
+.export-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1.25rem;
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: all 0.18s;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    width: 100%;
+}
+.export-action-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.export-action-btn .ea-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+}
+.export-action-btn .ea-text { flex: 1; }
+.export-action-btn .ea-title { display: block; }
+.export-action-btn .ea-sub { display: block; font-size: 0.72rem; font-weight: 400; opacity: 0.7; font-family: var(--font-mono); }
+
+.ea-excel { background: var(--green-100); color: #065f46; border-color: #a7f3d0; }
+.ea-excel:hover { background: var(--green-500); color: white; border-color: var(--green-500); }
+.ea-excel .ea-icon { background: var(--green-500); color: white; }
+
+.ea-cypress { background: var(--violet-100); color: #4c1d95; border-color: #c4b5fd; }
+.ea-cypress:hover { background: var(--violet-600); color: white; border-color: var(--violet-600); }
+.ea-cypress .ea-icon { background: var(--violet-600); color: white; }
+
+.ea-gherkin { background: var(--cyan-light,#ecfeff); color: #0e7490; border-color: #a5f3fc; }
+.ea-gherkin:hover { background: var(--cyan); color: white; border-color: var(--cyan); }
+.ea-gherkin .ea-icon { background: var(--cyan); color: white; }
+
+.ea-preview { background: var(--brand-50); color: var(--brand-700); border-color: var(--brand-100); }
+.ea-preview:hover { background: var(--brand-500); color: white; border-color: var(--brand-500); }
+.ea-preview .ea-icon { background: var(--brand-500); color: white; }
+
+.ea-new { background: var(--white); color: var(--slate-500); border-color: var(--slate-200); }
+.ea-new:hover { border-color: var(--slate-300); color: var(--slate-700); }
+.ea-new .ea-icon { background: var(--slate-100); color: var(--slate-500); }
+
+.ea-chevron { color: currentColor; opacity: 0.4; font-size: 1rem; }
+</style>
+{% endblock %}
+
 {% block content %}
-<div style="max-width:640px; margin:3rem auto;">
+<div class="result-wrapper">
 
     <!-- SUCCESS HEADER -->
-    <div style="text-align:center; margin-bottom:2rem;">
-        <div style="width:72px;height:72px;background:linear-gradient(135deg,var(--green-500),var(--cyan));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.25rem;box-shadow:0 8px 24px rgba(16,185,129,0.3);">✅</div>
-        <h1 style="font-size:1.75rem;font-weight:800;color:var(--brand-800);letter-spacing:-0.04em;margin-bottom:0.5rem;">Conversion réussie !</h1>
-        <p style="color:var(--slate-500);font-size:0.95rem;">Votre fichier Excel est prêt. Vous pouvez aussi générer les scripts Gherkin.</p>
+    <div class="result-header">
+        <div class="success-icon">✅</div>
+        <h1 class="result-title">Conversion réussie !</h1>
+        <p class="result-sub">Vos fichiers sont prêts. Choisissez votre format d'export ci-dessous.</p>
     </div>
 
-    <!-- INFO CARD -->
-    <div class="card mb-6">
-        <div class="card-body">
-            <div class="grid-2">
-                <div>
-                    <div class="text-xs text-muted mb-2">Fichier source</div>
-                    <div style="font-weight:600;font-family:var(--font-mono);font-size:0.85rem;color:var(--brand-800);">{{ job.source_filename }}</div>
-                </div>
-                <div>
-                    <div class="text-xs text-muted mb-2">Use Cases extraits</div>
-                    <div style="font-weight:800;font-size:1.5rem;color:var(--brand-500);font-family:var(--font-mono);">{{ job.use_cases_count }}</div>
-                </div>
-                <div>
-                    <div class="text-xs text-muted mb-2">Cas automatisables</div>
-                    <div style="font-weight:800;font-size:1.5rem;color:var(--green-500);font-family:var(--font-mono);">{{ automated_count }}</div>
-                </div>
-                <div>
-                    <div class="text-xs text-muted mb-2">Statut</div>
-                    <span class="badge badge-done">✓ Terminé</span>
-                </div>
-            </div>
+    <!-- HEADER BANNER -->
+    <div class="result-banner">
+        <div class="result-banner-r1">
+            <div class="result-banner-company">{{ job.company_name|default:"QA Recipe Converter" }}</div>
+            {% if job.company_logo %}
+            <img src="{{ job.company_logo.url }}" style="max-height:36px; max-width:130px; object-fit:contain; border-radius:4px;" alt="logo">
+            {% endif %}
+        </div>
+        <div class="result-banner-r2">
+            📄 Source : {{ job.source_filename }}
+            &nbsp;│&nbsp;
+            📊 Export : {{ job.effective_excel_filename }}
         </div>
     </div>
 
-    <!-- ACTIONS -->
-    <div style="display:flex;flex-direction:column;gap:0.875rem;">
-        <a href="{% url 'core:generate' job.id %}" class="btn btn-success btn-lg w-full" style="justify-content:center;">
-            📊 Télécharger l'Excel (.xlsx)
+    <!-- INFO GRID -->
+    <div class="info-grid">
+        <div class="info-box">
+            <div class="info-box-label">Fichier source</div>
+            <div class="info-box-value" title="{{ job.source_filename }}">{{ job.source_filename|truncatechars:30 }}</div>
+        </div>
+        <div class="info-box">
+            <div class="info-box-label">Fichier Excel</div>
+            <div class="info-box-value" title="{{ job.effective_excel_filename }}">{{ job.effective_excel_filename|truncatechars:30 }}</div>
+        </div>
+        <div class="info-box">
+            <div class="info-box-label">Use Cases extraits</div>
+            <div class="info-box-value big">{{ job.use_cases_count }}</div>
+        </div>
+        <div class="info-box">
+            <div class="info-box-label">Cas automatisables</div>
+            <div class="info-box-value big green">{{ automated_count }}</div>
+        </div>
+    </div>
+
+    <!-- EXPORT ACTIONS -->
+    <div class="export-actions">
+        <a href="{% url 'core:generate' job.id %}" class="export-action-btn ea-excel">
+            <div class="ea-icon">📊</div>
+            <div class="ea-text">
+                <span class="ea-title">Télécharger l'Excel complet</span>
+                <span class="ea-sub">{{ job.effective_excel_filename }} · 2 feuilles · avec en-tête et logo</span>
+            </div>
+            <span class="ea-chevron">→</span>
         </a>
-        <a href="{% url 'core:gherkin' job.id %}?mode=cypress" class="btn btn-violet btn-lg w-full" style="justify-content:center;">
-            🌲 Télécharger le projet Cypress (.zip)
+
+        {% if automated_count > 0 %}
+        <a href="{% url 'core:gherkin' job.id %}?mode=cypress" class="export-action-btn ea-cypress">
+            <div class="ea-icon">🌲</div>
+            <div class="ea-text">
+                <span class="ea-title">Télécharger le projet Cypress</span>
+                <span class="ea-sub">{{ automated_count }} fichier(s) .feature · step definitions · npm ready</span>
+            </div>
+            <span class="ea-chevron">→</span>
         </a>
-        <a href="{% url 'core:gherkin' job.id %}?mode=gherkin" class="btn btn-outline btn-lg w-full" style="justify-content:center;">
-            📝 Télécharger les fichiers Gherkin (.zip)
+
+        <a href="{% url 'core:gherkin' job.id %}?mode=gherkin" class="export-action-btn ea-gherkin">
+            <div class="ea-icon">📝</div>
+            <div class="ea-text">
+                <span class="ea-title">Télécharger les fichiers Gherkin</span>
+                <span class="ea-sub">{{ automated_count }} fichier(s) .feature · BDD/Cucumber</span>
+            </div>
+            <span class="ea-chevron">→</span>
         </a>
-        <a href="{% url 'core:preview' job.id %}" class="btn btn-ghost btn-lg w-full" style="justify-content:center;">
-            ← Retour à la prévisualisation
+        {% else %}
+        <div class="export-action-btn ea-new" style="opacity:0.5; cursor:default;">
+            <div class="ea-icon">📝</div>
+            <div class="ea-text">
+                <span class="ea-title">Scripts Gherkin & Cypress</span>
+                <span class="ea-sub">Aucun cas marqué comme automatisable — retournez à la prévisualisation</span>
+            </div>
+        </div>
+        {% endif %}
+
+        <a href="{% url 'core:preview' job.id %}" class="export-action-btn ea-preview">
+            <div class="ea-icon">✏️</div>
+            <div class="ea-text">
+                <span class="ea-title">Retour à la prévisualisation</span>
+                <span class="ea-sub">Modifier les données, marquer les cas automatisables, changer l'en-tête</span>
+            </div>
+            <span class="ea-chevron">→</span>
         </a>
-        <a href="{% url 'core:index' %}" class="btn btn-ghost w-full" style="justify-content:center;">
-            ↩️ Nouvelle conversion
+
+        <a href="{% url 'core:index' %}" class="export-action-btn ea-new">
+            <div class="ea-icon">↩️</div>
+            <div class="ea-text">
+                <span class="ea-title">Nouvelle conversion</span>
+                <span class="ea-sub">Analyser un autre fichier Word</span>
+            </div>
+            <span class="ea-chevron">→</span>
         </a>
     </div>
 </div>
