@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class ConversionJob(models.Model):
@@ -29,6 +30,18 @@ class ConversionJob(models.Model):
                                         verbose_name='Nom du fichier Excel')
     company_logo     = models.FileField(upload_to='uploads/logos/', blank=True, null=True,
                                         verbose_name='Logo entreprise')
+
+    # ── Liaison Teams / Projects (v2.2) ────────────────────────────────────
+    project     = models.ForeignKey(
+        'teams.Project', on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='conversion_jobs',
+        verbose_name='Projet'
+    )
+    uploaded_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='conversion_jobs',
+        verbose_name='Uploadé par'
+    )
 
     class Meta:
         ordering         = ['-created_at']

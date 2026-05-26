@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Créer un compte — QA Recipe Converter{% endblock %}
+{% block content %}
+<div style="max-width:480px;margin:3rem auto;">
+  <div class="card">
+    <div class="card-header" style="background:linear-gradient(135deg,#0f2342,#1a3a6e);border-radius:var(--radius-lg) var(--radius-lg) 0 0;justify-content:center;">
+      <div style="text-align:center;">
+        <div style="font-size:2rem;margin-bottom:0.4rem;">🚀</div>
+        <div style="font-size:1rem;font-weight:800;color:white;">Créer un compte</div>
+      </div>
+    </div>
+    <div class="card-body" style="padding:2rem;">
+      {% if errors %}
+        {% for field, errs in errors.items %}
+          {% for e in errs %}<div class="alert alert-error">⚠️ {{ field }} : {{ e }}</div>{% endfor %}
+        {% endfor %}
+      {% endif %}
+      <form method="post">
+        {% csrf_token %}
+        <div class="grid-2" style="gap:0.875rem;margin-bottom:0.875rem;">
+          <div>
+            <label style="display:block;font-size:0.78rem;font-weight:600;color:var(--slate-600);margin-bottom:0.3rem;">Prénom</label>
+            <input type="text" name="first_name" style="width:100%;padding:0.55rem 0.75rem;border:1.5px solid var(--slate-200);border-radius:var(--radius);font-size:0.875rem;outline:none;" onfocus="this.style.borderColor='var(--brand-400)'" onblur="this.style.borderColor='var(--slate-200)'">
+          </div>
+          <div>
+            <label style="display:block;font-size:0.78rem;font-weight:600;color:var(--slate-600);margin-bottom:0.3rem;">Nom</label>
+            <input type="text" name="last_name" style="width:100%;padding:0.55rem 0.75rem;border:1.5px solid var(--slate-200);border-radius:var(--radius);font-size:0.875rem;outline:none;" onfocus="this.style.borderColor='var(--brand-400)'" onblur="this.style.borderColor='var(--slate-200)'">
+          </div>
+        </div>
+        <div style="margin-bottom:0.875rem;">
+          <label style="display:block;font-size:0.78rem;font-weight:600;color:var(--slate-600);margin-bottom:0.3rem;">Nom d'utilisateur <span style="color:var(--red-600);">*</span></label>
+          <input type="text" name="username" required style="width:100%;padding:0.55rem 0.75rem;border:1.5px solid var(--slate-200);border-radius:var(--radius);font-size:0.875rem;font-family:var(--font-mono);outline:none;" onfocus="this.style.borderColor='var(--brand-400)'" onblur="this.style.borderColor='var(--slate-200)'">
+        </div>
+        <div style="margin-bottom:0.875rem;">
+          <label style="display:block;font-size:0.78rem;font-weight:600;color:var(--slate-600);margin-bottom:0.3rem;">Email <span style="color:var(--red-600);">*</span></label>
+          <input type="email" name="email" required style="width:100%;padding:0.55rem 0.75rem;border:1.5px solid var(--slate-200);border-radius:var(--radius);font-size:0.875rem;outline:none;" onfocus="this.style.borderColor='var(--brand-400)'" onblur="this.style.borderColor='var(--slate-200)'">
+        </div>
+        <div style="margin-bottom:1.5rem;">
+          <label style="display:block;font-size:0.78rem;font-weight:600;color:var(--slate-600);margin-bottom:0.3rem;">Mot de passe <span style="color:var(--red-600);">*</span></label>
+          <input type="password" name="password" required minlength="8" style="width:100%;padding:0.55rem 0.75rem;border:1.5px solid var(--slate-200);border-radius:var(--radius);font-size:0.875rem;outline:none;" onfocus="this.style.borderColor='var(--brand-400)'" onblur="this.style.borderColor='var(--slate-200)'">
+          <div style="font-size:0.72rem;color:var(--slate-400);margin-top:4px;">Minimum 8 caractères</div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:0.75rem;font-size:0.95rem;">
+          ✨ Créer mon compte
+        </button>
+      </form>
+      <div style="text-align:center;margin-top:1.25rem;font-size:0.82rem;color:var(--slate-400);">
+        Déjà un compte ? <a href="{% url 'web-login' %}" style="color:var(--brand-500);font-weight:600;text-decoration:none;">Se connecter →</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.parser',
     'apps.api',
+    'apps.teams',
 ]
 
 MIDDLEWARE = [
@@ -93,6 +94,15 @@ ALLOWED_WORD_EXTENSIONS = ['.docx', '.doc']
 ALLOWED_EXCEL_EXTENSIONS = ['.xlsx']
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
@@ -108,3 +118,20 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
 ]
 CORS_ALLOW_ALL_ORIGINS = True
+
+# Email (dev: console, prod: SMTP via env)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST     = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT     = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS  = True
+EMAIL_HOST_USER     = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL  = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@qa-recipe.dev')
+
+# Auth
+LOGIN_URL          = '/teams/login/'
+LOGIN_REDIRECT_URL = '/teams/'
+LOGOUT_REDIRECT_URL = '/'
+
+# Avatar upload max size (2 MB)
+AVATAR_MAX_SIZE_MB = 2
