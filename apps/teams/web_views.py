@@ -139,7 +139,12 @@ class CreateProjectPageView(LoginRequiredMixin, View):
         if not team.is_admin(request.user):
             messages.error(request, 'Seuls owner/admin peuvent créer un projet.')
             return redirect('team-page', slug=slug)
-        return render(request, 'teams/project_form.html', {'team': team})
+        return render(request, 'teams/project_form.html', {
+            'team': team,
+            'COLORS': ['#3B82F6', '#2563eb', '#7c3aed', '#059669', '#d97706', '#dc2626', '#0891b2', '#0f172a', '#ec4899', '#f97316', '#6366f1', '#14b8a6'],
+            'ICONS': ['📋', '🧪', '🚀', '🔒', '⚡', '🎯', '🌐', '📊', '🔧', '🛡️', '💡', '🏆', '🔬', '📈', '🗂️', '✅'],
+            'COLORS_JSON': ["#3B82F6", "#2563eb", "#7c3aed", "#059669", "#d97706", "#dc2626", "#0891b2", "#0f172a", "#ec4899", "#f97316", "#6366f1", "#14b8a6"],
+        })
 
     def post(self, request, slug):
         team = get_object_or_404(Team, slug=slug)
@@ -156,7 +161,12 @@ class CreateProjectPageView(LoginRequiredMixin, View):
 
         if not name:
             messages.error(request, 'Le nom du projet est requis.')
-            return render(request, 'teams/project_form.html', {'team': team})
+            return render(request, 'teams/project_form.html', {
+            'team': team,
+            'COLORS': ['#3B82F6', '#2563eb', '#7c3aed', '#059669', '#d97706', '#dc2626', '#0891b2', '#0f172a', '#ec4899', '#f97316', '#6366f1', '#14b8a6'],
+            'ICONS': ['📋', '🧪', '🚀', '🔒', '⚡', '🎯', '🌐', '📊', '🔧', '🛡️', '💡', '🏆', '🔬', '📈', '🗂️', '✅'],
+            'COLORS_JSON': ["#3B82F6", "#2563eb", "#7c3aed", "#059669", "#d97706", "#dc2626", "#0891b2", "#0f172a", "#ec4899", "#f97316", "#6366f1", "#14b8a6"],
+        })
 
         project = Project.objects.create(
             team=team, created_by=request.user,

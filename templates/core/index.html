@@ -489,10 +489,35 @@
                 </div>
             </div>
 
-            <!-- STEP 3 : Template Excel (optionnel) -->
+            <!-- STEP 3 : Projet (optionnel) -->
+            {% if user.is_authenticated and user_teams %}
             <div class="form-card-section">
                 <div class="section-label">
                     <span class="step-num">3</span>
+                    Associer à un projet <span style="font-weight:400;color:var(--slate-300);margin-left:4px;">(optionnel)</span>
+                </div>
+                <select name="project_id" class="file-field-styled" style="height:auto;cursor:pointer;">
+                    <option value="">— Aucun projet (conversion standalone) —</option>
+                    {% for team in user_teams %}
+                    <optgroup label="{{ team.name }}">
+                        {% for proj in team.projects.all %}
+                        {% if proj.status != 'archived' %}
+                        <option value="{{ proj.id }}">{{ proj.icon }} {{ proj.name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </optgroup>
+                    {% endfor %}
+                </select>
+                <div style="font-size:0.72rem;color:var(--slate-400);margin-top:6px;">
+                    La conversion sera rattachée aux statistiques du projet sélectionné.
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- STEP 4 : Template Excel (optionnel) -->
+            <div class="form-card-section">
+                <div class="section-label">
+                    <span class="step-num">{% if user.is_authenticated and user_teams %}4{% else %}3{% endif %}</span>
                     Template Excel <span style="font-weight:400;color:var(--slate-300);margin-left:4px;">(optionnel)</span>
                 </div>
                 <input type="file" name="excel_template" accept=".xlsx" class="file-field-styled">

@@ -3,117 +3,111 @@
 {% block extra_css %}
 <style>
 .dash-header {
-  background:linear-gradient(135deg,#0a1628 0%,#1a3a6e 100%);
-  border-radius:var(--radius-xl);
-  padding:1.5rem 1.75rem;
-  margin-bottom:1.5rem;
-  color:white;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;
-  box-shadow:var(--shadow-xl);
+  background: linear-gradient(135deg, #0a1628 0%, #1a3a6e 100%);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1.5rem;
+  color: white;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+  box-shadow: var(--shadow-xl);
 }
-.dash-team-info { display:flex;align-items:center;gap:1rem; }
+.dash-team-info { display: flex; align-items: center; gap: 1rem; }
 .dash-avatar {
-  width:52px;height:52px;border-radius:14px;
-  background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.2);
-  display:flex;align-items:center;justify-content:center;font-size:1.5rem;
-  overflow:hidden;flex-shrink:0;
+  width: 52px; height: 52px; border-radius: 14px;
+  background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; overflow: hidden; flex-shrink: 0;
 }
-.dash-avatar img { width:100%;height:100%;object-fit:cover; }
-.dash-name { font-size:1.3rem;font-weight:800;letter-spacing:-0.03em; }
-.dash-slug { font-size:0.72rem;color:rgba(255,255,255,0.4);font-family:var(--font-mono);margin-top:2px; }
-.dash-actions { display:flex;gap:0.5rem;flex-wrap:wrap; }
+.dash-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.dash-name { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; }
+.dash-slug { font-size: 0.72rem; color: rgba(255,255,255,0.4); font-family: var(--font-mono); margin-top: 2px; }
 
-/* Stats */
-.kpi-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.5rem; }
+/* KPI grid */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
 .kpi-box {
-  background:white;border:1px solid var(--slate-200);border-radius:var(--radius-lg);
-  padding:1rem 1.25rem;box-shadow:var(--shadow-xs);transition:box-shadow 0.2s;
+  background: white; border: 1px solid var(--slate-200); border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem; box-shadow: var(--shadow-xs); transition: box-shadow 0.2s;
 }
-.kpi-box:hover { box-shadow:var(--shadow-md); }
-.kpi-icon { font-size:1.5rem;margin-bottom:0.5rem; }
-.kpi-val { font-size:1.75rem;font-weight:800;color:var(--brand-800);font-family:var(--font-mono);line-height:1; }
-.kpi-lbl { font-size:0.72rem;color:var(--slate-400);font-weight:500;margin-top:3px; }
-.kpi-green .kpi-val { color:var(--green-500); }
-.kpi-blue  .kpi-val { color:var(--brand-500); }
-.kpi-cyan  .kpi-val { color:var(--cyan); }
+.kpi-box:hover { box-shadow: var(--shadow-md); }
+.kpi-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.kpi-val  { font-size: 1.75rem; font-weight: 800; color: var(--brand-800); font-family: var(--font-mono); line-height: 1; }
+.kpi-lbl  { font-size: 0.72rem; color: var(--slate-400); font-weight: 500; margin-top: 3px; }
+.kpi-green .kpi-val { color: var(--green-500); }
+.kpi-blue  .kpi-val { color: var(--brand-500); }
 
-/* Progress bar */
-.success-bar-wrap { margin-top:0.75rem; }
-.success-bar-label { display:flex;justify-content:space-between;font-size:0.72rem;color:var(--slate-500);margin-bottom:4px; }
-.success-bar { height:8px;background:var(--slate-100);border-radius:999px;overflow:hidden; }
-.success-bar-fill { height:100%;background:linear-gradient(90deg,var(--green-500),var(--cyan));border-radius:999px;transition:width 0.7s ease; }
-
-/* Two-column layout */
-.dash-grid { display:grid;grid-template-columns:1fr 320px;gap:1.5rem;align-items:start; }
+/* Main grid */
+.dash-grid { display: grid; grid-template-columns: 1fr 320px; gap: 1.5rem; align-items: start; }
 
 /* Project cards */
-.proj-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem; }
+.proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
 .proj-card {
-  background:white;border:1px solid var(--slate-200);border-radius:var(--radius-lg);
-  overflow:hidden;box-shadow:var(--shadow-xs);transition:all 0.18s;text-decoration:none;color:inherit;display:block;
+  background: white; border: 1px solid var(--slate-200); border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-xs); transition: all 0.18s;
+  text-decoration: none; color: inherit; display: block;
 }
-.proj-card:hover { box-shadow:var(--shadow-md);transform:translateY(-2px); }
+.proj-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
 .proj-card-top {
-  height:56px;padding:0 1rem;
-  display:flex;align-items:center;gap:0.75rem;
+  height: 56px; padding: 0 1rem;
+  display: flex; align-items: center; gap: 0.75rem;
 }
 .proj-card-icon {
-  width:34px;height:34px;border-radius:9px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;flex-shrink:0;color:white;overflow:hidden;
+  width: 34px; height: 34px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0; color: white; overflow: hidden;
+  background: rgba(255,255,255,0.15);
 }
-.proj-card-icon img { width:100%;height:100%;object-fit:cover; }
-.proj-card-name { font-weight:700;color:white;font-size:0.9rem;letter-spacing:-0.02em; }
-.proj-card-body { padding:0.875rem 1rem; }
-.proj-card-desc { font-size:0.78rem;color:var(--slate-500);margin-bottom:0.75rem;min-height:2em;line-height:1.5; }
-.proj-card-footer { display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.4rem; }
-.vis-badge {
-  font-size:0.68rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:10px;
-  font-family:var(--font-mono);
-}
-.vis-private { background:var(--slate-100);color:var(--slate-500); }
-.vis-team    { background:var(--brand-100);color:var(--brand-600); }
-.vis-public  { background:var(--green-100);color:var(--green-600); }
-.status-badge {
-  font-size:0.68rem;font-weight:600;padding:0.15rem 0.5rem;border-radius:10px;
-}
-.status-active    { background:#dcfce7;color:#166534; }
-.status-archived  { background:var(--slate-100);color:var(--slate-500); }
-.status-completed { background:var(--brand-100);color:var(--brand-700); }
+.proj-card-icon img { width: 100%; height: 100%; object-fit: cover; }
+.proj-card-name { font-weight: 700; color: white; font-size: 0.9rem; letter-spacing: -0.02em; }
+.proj-card-body { padding: 0.875rem 1rem; }
+.proj-card-desc { font-size: 0.78rem; color: var(--slate-500); margin-bottom: 0.75rem; min-height: 2em; line-height: 1.5; }
+.proj-card-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.4rem; }
+
+.vis-badge { font-size: 0.68rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 10px; font-family: var(--font-mono); }
+.vis-private { background: var(--slate-100); color: var(--slate-500); }
+.vis-team    { background: var(--brand-100); color: var(--brand-600); }
+.vis-public  { background: var(--green-100); color: var(--green-600); }
+
+.status-badge { font-size: 0.68rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 10px; }
+.status-active    { background: #dcfce7; color: #166534; }
+.status-archived  { background: var(--slate-100); color: var(--slate-500); }
+.status-completed { background: var(--brand-100); color: var(--brand-700); }
 
 /* Members */
-.member-list { display:flex;flex-direction:column;gap:0.5rem; }
 .member-row {
-  display:flex;align-items:center;gap:0.75rem;
-  padding:0.6rem 0.875rem;
-  background:var(--slate-50);border-radius:var(--radius);
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.6rem 0.875rem; background: var(--slate-50); border-radius: var(--radius);
 }
 .member-avatar-sm {
-  width:32px;height:32px;border-radius:8px;
-  background:var(--brand-500);color:white;
-  display:flex;align-items:center;justify-content:center;
-  font-size:0.85rem;font-weight:700;flex-shrink:0;
+  width: 32px; height: 32px; border-radius: 8px;
+  color: white; display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 700; flex-shrink: 0;
 }
-.member-name { font-size:0.85rem;font-weight:600;color:var(--brand-800); }
-.member-username { font-size:0.72rem;color:var(--slate-400);font-family:var(--font-mono); }
+.role-badge-sm {
+  font-size: 0.68rem; font-weight: 700; padding: 0.15rem 0.5rem;
+  border-radius: 10px; white-space: nowrap;
+}
 
 /* Activity */
-.activity-list { display:flex;flex-direction:column;gap:0.5rem; }
 .activity-item {
-  display:flex;align-items:flex-start;gap:0.75rem;
-  padding:0.625rem 0.875rem;
-  background:var(--slate-50);border-radius:var(--radius);border-left:3px solid var(--brand-300);
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 0.625rem 0.875rem; background: var(--slate-50);
+  border-radius: var(--radius); border-left: 3px solid var(--brand-300);
+  margin-bottom: 0.5rem;
 }
-.activity-icon { font-size:1rem;flex-shrink:0;margin-top:1px; }
-.activity-text { font-size:0.8rem;color:var(--slate-700);line-height:1.5; }
-.activity-time { font-size:0.7rem;color:var(--slate-400);font-family:var(--font-mono); }
 
-@media(max-width:900px){ .dash-grid{grid-template-columns:1fr;} }
+/* Invite modal */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(2,6,23,0.6); z-index: 9000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+.modal-overlay.show { display: flex; }
+.modal-box { background: white; border-radius: var(--radius-xl); padding: 1.75rem; max-width: 440px; width: 92%; box-shadow: var(--shadow-xl); animation: modalIn 0.2s ease; }
+@keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(-8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+@media (max-width: 900px) { .dash-grid { grid-template-columns: 1fr; } }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- HEADER BANNER -->
+<!-- HEADER -->
 <div class="dash-header">
   <div class="dash-team-info">
     <div class="dash-avatar">
@@ -122,20 +116,24 @@
     </div>
     <div>
       <div class="dash-name">{{ team.name }}</div>
-      <div class="dash-slug">{{ team.slug }}</div>
+      <div class="dash-slug">/teams/{{ team.slug }}</div>
+      {% if team.description %}<div style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-top:3px;">{{ team.description|truncatechars:60 }}</div>{% endif %}
     </div>
   </div>
-  <div class="dash-actions">
+  <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
     {% if can_manage %}
     <a href="{% url 'project-new' team.slug %}" class="btn btn-cyan btn-sm">➕ Nouveau projet</a>
+    <button class="btn btn-ghost btn-sm" onclick="openInviteModal()"
+            style="color:rgba(255,255,255,0.6);border-color:rgba(255,255,255,0.15);">✉️ Inviter</button>
     {% endif %}
-    <a href="{% url 'teams-home' %}" class="btn btn-ghost btn-sm" style="color:rgba(255,255,255,0.6);border-color:rgba(255,255,255,0.15);">← Mes équipes</a>
+    <a href="{% url 'teams-home' %}" class="btn btn-ghost btn-sm"
+       style="color:rgba(255,255,255,0.5);border-color:rgba(255,255,255,0.1);">← Équipes</a>
   </div>
 </div>
 
 {% if messages %}{% for m in messages %}<div class="alert alert-{{ m.tags }}">{{ m }}</div>{% endfor %}{% endif %}
 
-<!-- KPI GRID -->
+<!-- KPIs -->
 <div class="kpi-grid">
   <div class="kpi-box kpi-blue">
     <div class="kpi-icon">📁</div>
@@ -152,23 +150,23 @@
     <div class="kpi-val">{{ stats.uc_total }}</div>
     <div class="kpi-lbl">Use Cases traités</div>
   </div>
-  <div class="kpi-box kpi-cyan">
+  <div class="kpi-box">
     <div class="kpi-icon">👥</div>
     <div class="kpi-val">{{ stats.members_count }}</div>
     <div class="kpi-lbl">Membres</div>
   </div>
 </div>
 
-<!-- SUCCESS RATE BAR -->
+<!-- SUCCESS RATE -->
 {% if stats.uc_total > 0 %}
 <div class="card mb-6">
-  <div class="card-body" style="padding:1.25rem 1.5rem;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
-      <div style="font-size:0.875rem;font-weight:700;color:var(--brand-800);">🎯 Taux de succès global</div>
-      <div style="font-size:1.2rem;font-weight:800;color:var(--green-500);font-family:var(--font-mono);">{{ stats.success_rate }}%</div>
+  <div class="card-body" style="padding:1.1rem 1.5rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <span style="font-size:0.875rem;font-weight:700;color:var(--brand-800);">🎯 Taux de succès global</span>
+      <span style="font-size:1.2rem;font-weight:800;color:var(--green-500);font-family:var(--font-mono);">{{ stats.success_rate }}%</span>
     </div>
-    <div class="success-bar">
-      <div class="success-bar-fill" style="width:{{ stats.success_rate }}%;"></div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width:{{ stats.success_rate }}%;"></div>
     </div>
     <div style="display:flex;justify-content:space-between;margin-top:0.5rem;font-size:0.72rem;color:var(--slate-400);">
       <span>{{ stats.uc_passed }} passés</span>
@@ -180,10 +178,10 @@
 
 <!-- MAIN GRID -->
 <div class="dash-grid">
-  <!-- LEFT: Projects -->
+  <!-- LEFT : Projects + Activity -->
   <div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-      <div style="font-size:0.95rem;font-weight:800;color:var(--brand-800);">📁 Projets</div>
+      <div style="font-size:0.95rem;font-weight:800;color:var(--brand-800);">📁 Projets ({{ stats.projects_total }})</div>
       {% if can_manage %}
       <a href="{% url 'project-new' team.slug %}" class="btn btn-primary btn-sm">➕ Nouveau</a>
       {% endif %}
@@ -191,10 +189,9 @@
 
     <div class="proj-grid">
       {% for project in projects %}
-      {% with color=project.color|default:"#1e4fa8" %}
       <a href="{% url 'project-page' team.slug project.slug %}" class="proj-card">
-        <div class="proj-card-top" style="background:linear-gradient(135deg,{{ color }},{{ color }}cc);">
-          <div class="proj-card-icon" style="background:rgba(255,255,255,0.15);">
+        <div class="proj-card-top" style="background:linear-gradient(135deg,{{ project.color|default:'#1e4fa8' }},{{ project.color|default:'#0f2342' }});">
+          <div class="proj-card-icon">
             {% if project.avatar %}<img src="{{ project.avatar.url }}" alt="">
             {% elif project.icon %}{{ project.icon }}
             {% else %}📋{% endif %}
@@ -215,16 +212,19 @@
               {% else %}✓ Terminé{% endif %}
             </span>
             {% with s=project.stats %}
-            {% if s.total > 0 %}
-            <span style="font-size:0.72rem;color:var(--slate-400);">{{ s.total }} UC · {{ s.success_rate }}%</span>
-            {% endif %}
+              {% if s.total > 0 %}
+              <span style="font-size:0.72rem;color:var(--slate-400);">{{ s.total }} UC · {{ s.success_rate }}%</span>
+              {% endif %}
             {% endwith %}
           </div>
         </div>
       </a>
       {% empty %}
-      <div style="grid-column:1/-1;padding:2rem;text-align:center;color:var(--slate-400);background:var(--slate-50);border-radius:var(--radius-lg);border:1px dashed var(--slate-200);">
-        {% if can_manage %}Aucun projet. <a href="{% url 'project-new' team.slug %}" style="color:var(--brand-500);font-weight:600;">Créer le premier →</a>
+      <div style="grid-column:1/-1;padding:2rem;text-align:center;color:var(--slate-400);
+                  background:var(--slate-50);border-radius:var(--radius-lg);border:1px dashed var(--slate-200);">
+        {% if can_manage %}
+        Aucun projet.
+        <a href="{% url 'project-new' team.slug %}" style="color:var(--brand-500);font-weight:600;">Créer le premier →</a>
         {% else %}Aucun projet accessible.{% endif %}
       </div>
       {% endfor %}
@@ -234,73 +234,98 @@
     {% if recent_jobs %}
     <div style="margin-top:1.5rem;">
       <div style="font-size:0.9rem;font-weight:800;color:var(--brand-800);margin-bottom:0.875rem;">🕒 Activité récente</div>
-      <div class="activity-list">
-        {% for job in recent_jobs %}
-        <div class="activity-item">
-          <div class="activity-icon">📄</div>
-          <div>
-            <div class="activity-text">
-              <strong>{{ job.source_filename|truncatechars:40 }}</strong>
-              {% if job.project %} → <span style="color:var(--brand-500);">{{ job.project.name }}</span>{% endif %}
-              — {{ job.use_cases_count }} Use Cases
-            </div>
-            <div class="activity-time">{{ job.created_at|date:"d/m/Y H:i" }} · {{ job.get_status_display }}</div>
+      {% for job in recent_jobs %}
+      <div class="activity-item">
+        <div style="font-size:1rem;flex-shrink:0;margin-top:1px;">📄</div>
+        <div>
+          <div style="font-size:0.8rem;color:var(--slate-700);line-height:1.5;">
+            <strong>{{ job.source_filename|truncatechars:40 }}</strong>
+            {% if job.project %} → <span style="color:var(--brand-500);">{{ job.project.name }}</span>{% endif %}
+            — {{ job.use_cases_count }} Use Cases
+          </div>
+          <div style="font-size:0.7rem;color:var(--slate-400);font-family:var(--font-mono);">
+            {{ job.created_at|date:"d/m/Y H:i" }} · {{ job.status }}
           </div>
         </div>
-        {% endfor %}
       </div>
+      {% endfor %}
     </div>
     {% endif %}
   </div>
 
-  <!-- RIGHT: Members -->
+  <!-- RIGHT : Members -->
   <div>
     <div class="card">
       <div class="card-header">
         <div class="card-title">👥 Membres ({{ stats.members_count }})</div>
         {% if can_manage %}
-        <button class="btn btn-ghost btn-sm" onclick="toggleInviteForm()">+ Inviter</button>
+        <button class="btn btn-ghost btn-sm" onclick="openInviteModal()">+ Inviter</button>
         {% endif %}
       </div>
-
-      <!-- Invite form (hidden by default) -->
-      {% if can_manage %}
-      <div id="inviteForm" style="display:none;padding:1rem;background:var(--brand-50);border-bottom:1px solid var(--brand-100);">
-        <div style="font-size:0.8rem;font-weight:700;color:var(--brand-700);margin-bottom:0.75rem;">✉️ Inviter par email</div>
-        <div style="margin-bottom:0.625rem;">
-          <input type="email" id="inviteEmail" placeholder="email@exemple.com"
-                 style="width:100%;padding:0.5rem 0.75rem;border:1.5px solid var(--slate-200);border-radius:var(--radius);font-size:0.82rem;outline:none;">
-        </div>
-        <div style="display:flex;gap:0.5rem;margin-bottom:0.75rem;">
-          <select id="inviteRole" style="flex:1;padding:0.45rem 0.65rem;border:1.5px solid var(--slate-200);border-radius:var(--radius);font-size:0.82rem;background:white;">
-            <option value="member">👤 Membre</option>
-            <option value="admin">🔧 Admin</option>
-            <option value="viewer">👁️ Lecteur</option>
-          </select>
-        </div>
-        <button class="btn btn-primary btn-sm w-full" style="justify-content:center;" onclick="sendInvite('{{ team.slug }}')">Envoyer l'invitation</button>
-      </div>
-      {% endif %}
-
       <div class="card-body" style="padding:0.875rem;">
-        <div class="member-list">
-          {% for m in members %}
-          <div class="member-row">
-            <div class="member-avatar-sm" style="background:{% cycle '#2563eb' '#059669' '#7c3aed' '#d97706' '#dc2626' %};">
-              {{ m.user.username|first|upper }}
-            </div>
-            <div style="flex:1;min-width:0;">
-              <div class="member-name">{{ m.user.get_full_name|default:m.user.username }}</div>
-              <div class="member-username">@{{ m.user.username }}</div>
-            </div>
-            <span class="team-role-badge role-{{ m.role }}" style="font-size:0.68rem;">
-              {% if m.role == 'owner' %}👑{% elif m.role == 'admin' %}🔧{% elif m.role == 'member' %}👤{% else %}👁️{% endif %}
-              {{ m.get_role_display }}
-            </span>
+        {% for m in members %}
+        <div class="member-row" style="margin-bottom:0.4rem;">
+          <div class="member-avatar-sm" style="background:{% cycle '#2563eb' '#059669' '#7c3aed' '#d97706' '#dc2626' '#0891b2' %};">
+            {{ m.user.username|first|upper }}
           </div>
-          {% endfor %}
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:0.82rem;font-weight:600;color:var(--brand-800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              {{ m.user.get_full_name|default:m.user.username }}
+            </div>
+            <div style="font-size:0.7rem;color:var(--slate-400);font-family:var(--font-mono);">@{{ m.user.username }}</div>
+          </div>
+          <span class="role-badge-sm
+            {% if m.role == 'owner' %}role-owner
+            {% elif m.role == 'admin' %}role-admin
+            {% elif m.role == 'member' %}role-member
+            {% else %}role-viewer{% endif %}">
+            {% if m.role == 'owner' %}👑 Owner
+            {% elif m.role == 'admin' %}🔧 Admin
+            {% elif m.role == 'member' %}👤 Member
+            {% else %}👁️ Viewer{% endif %}
+          </span>
         </div>
+        {% endfor %}
       </div>
+    </div>
+
+    <!-- Quick upload shortcut -->
+    <div class="card mt-4" style="background:linear-gradient(135deg,var(--brand-50),#f0fdfe);border-color:var(--brand-100);">
+      <div class="card-body" style="padding:1.1rem 1.25rem;text-align:center;">
+        <div style="font-size:1.5rem;margin-bottom:0.5rem;">⬆️</div>
+        <div style="font-size:0.85rem;font-weight:700;color:var(--brand-700);margin-bottom:0.35rem;">Uploader une recette</div>
+        <div style="font-size:0.75rem;color:var(--slate-500);margin-bottom:0.875rem;">Convertissez un fichier Word et associez-le à un projet de cette équipe.</div>
+        <a href="/" class="btn btn-primary btn-sm w-full" style="justify-content:center;">🧪 Aller au convertisseur</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INVITE MODAL -->
+<div class="modal-overlay" id="inviteModal">
+  <div class="modal-box">
+    <div style="font-size:1.05rem;font-weight:800;color:var(--brand-800);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;">
+      ✉️ Inviter un membre
+    </div>
+    <div style="margin-bottom:0.875rem;">
+      <label style="display:block;font-size:0.78rem;font-weight:600;color:var(--slate-600);margin-bottom:0.35rem;">Adresse email *</label>
+      <input type="email" id="inviteEmail" placeholder="colleague@example.com"
+             style="width:100%;padding:0.55rem 0.75rem;border:1.5px solid var(--slate-200);border-radius:var(--radius);font-size:0.875rem;outline:none;"
+             onfocus="this.style.borderColor='var(--brand-400)'" onblur="this.style.borderColor='var(--slate-200)'">
+    </div>
+    <div style="margin-bottom:1.25rem;">
+      <label style="display:block;font-size:0.78rem;font-weight:600;color:var(--slate-600);margin-bottom:0.35rem;">Rôle</label>
+      <select id="inviteRole"
+              style="width:100%;padding:0.55rem 0.75rem;border:1.5px solid var(--slate-200);border-radius:var(--radius);font-size:0.875rem;background:white;outline:none;">
+        <option value="member">👤 Membre — peut uploader et générer</option>
+        <option value="admin">🔧 Admin — peut créer des projets et inviter</option>
+        <option value="viewer">👁️ Lecteur — lecture seule</option>
+      </select>
+    </div>
+    <div id="inviteStatus" style="display:none;padding:0.5rem 0.75rem;border-radius:var(--radius);font-size:0.82rem;margin-bottom:0.875rem;"></div>
+    <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+      <button class="btn btn-ghost btn-sm" onclick="closeInviteModal()">Annuler</button>
+      <button class="btn btn-primary btn-sm" onclick="sendInvite('{{ team.slug }}')">✉️ Envoyer l'invitation</button>
     </div>
   </div>
 </div>
@@ -308,15 +333,28 @@
 
 {% block extra_js %}
 <script>
-function toggleInviteForm() {
-  const f = document.getElementById('inviteForm');
-  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+function openInviteModal() {
+  document.getElementById('inviteModal').classList.add('show');
+  document.getElementById('inviteEmail').focus();
 }
+function closeInviteModal() {
+  document.getElementById('inviteModal').classList.remove('show');
+  document.getElementById('inviteEmail').value = '';
+  document.getElementById('inviteStatus').style.display = 'none';
+}
+document.getElementById('inviteModal').addEventListener('click', function(e) {
+  if (e.target === this) closeInviteModal();
+});
 
 async function sendInvite(slug) {
   const email = document.getElementById('inviteEmail').value.trim();
   const role  = document.getElementById('inviteRole').value;
-  if (!email) { showToast('Email requis', 'error'); return; }
+  const statusEl = document.getElementById('inviteStatus');
+
+  if (!email) {
+    showStatus('error', '⚠️ Email requis.');
+    return;
+  }
 
   try {
     const resp = await fetch(`/api/teams/${slug}/members/`, {
@@ -326,14 +364,23 @@ async function sendInvite(slug) {
     });
     const data = await resp.json();
     if (resp.ok) {
+      showStatus('success', `✅ Invitation envoyée à ${email}`);
       showToast(`✅ Invitation envoyée à ${email}`, 'success');
-      document.getElementById('inviteEmail').value = '';
-      document.getElementById('inviteForm').style.display = 'none';
+      setTimeout(closeInviteModal, 2000);
     } else {
-      showToast('❌ ' + (data.error || JSON.stringify(data)), 'error');
+      const msg = data.error || Object.values(data).flat().join(', ');
+      showStatus('error', '❌ ' + msg);
     }
   } catch (e) {
-    showToast('Erreur réseau', 'error');
+    showStatus('error', '❌ Erreur réseau : ' + e.message);
+  }
+
+  function showStatus(type, msg) {
+    statusEl.style.display = 'block';
+    statusEl.style.background = type === 'success' ? 'var(--green-100)' : 'var(--red-100)';
+    statusEl.style.color = type === 'success' ? '#065f46' : '#991b1b';
+    statusEl.style.border = `1px solid ${type === 'success' ? '#a7f3d0' : '#fca5a5'}`;
+    statusEl.textContent = msg;
   }
 }
 </script>
